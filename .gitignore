@@ -1,0 +1,20 @@
+# Maven / Gradle build
+/target/
+/build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Spring Boot specific
+application-*.yml
+application-*.properties
