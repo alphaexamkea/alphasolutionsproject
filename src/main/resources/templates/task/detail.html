@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Task Detail</title>
+</head>
+<body>
+<h1 th:text="${task.name}"></h1>
+<p><strong>Description:</strong> <span th:text="${task.description}"></span></p>
+<p><strong>Estimated Hours:</strong> <span th:text="${task.estimatedHours}"></span></p>
+<p><strong>Deadline:</strong> <span th:text="${task.deadline}"></span></p>
+<p><strong>Status:</strong> <span th:text="${task.status}"></span></p>
+
+<a th:href="@{/tasks/{id}/edit(id=${task.taskId})}">Edit</a> |
+<a th:href="@{/tasks/{id}/delete(id=${task.taskId})}" onclick="return confirm('Are you sure?')">Delete</a> |
+<a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}">Back to Task List</a>
+</body>
+</html>

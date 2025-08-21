@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${task.taskId == 0} ? 'Create Task' : 'Edit Task'">Task Form</title>
+</head>
+<body>
+<h1 th:text="${task.taskId == 0} ? 'Create New Task' : 'Edit Task'"></h1>
+
+<!-- CREATE FORM -->
+<form th:if="${task.taskId == 0}"
+      th:action="@{/subprojects/{sid}/tasks(sid=${task.subprojectId})}"
+      th:object="${task}" method="post">
+
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" required/><br/>
+
+    <label>Description:</label>
+    <textarea th:field="*{description}"></textarea><br/>
+
+    <label>Estimated Hours:</label>
+    <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
+
+    <label>Deadline:</label>
+    <input type="date" th:field="*{deadline}"/><br/>
+
+    <label>Status:</label>
+    <select th:field="*{status}">
+        <option value="TO_DO">To Do</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="DONE">Done</option>
+    </select><br/>
+
+    <button type="submit">Save</button>
+</form>
+
+<!-- EDIT FORM -->
+<form th:if="${task.taskId != 0}"
+      th:action="@{/tasks/{id}/update(id=${task.taskId})}"
+      th:object="${task}" method="post">
+
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" required/><br/>
+
+    <label>Description:</label>
+    <textarea th:field="*{description}"></textarea><br/>
+
+    <label>Estimated Hours:</label>
+    <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
+
+    <label>Deadline:</label>
+    <input type="date" th:field="*{deadline}"/><br/>
+
+    <label>Status:</label>
+    <select th:field="*{status}">
+        <option value="TO_DO">To Do</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="DONE">Done</option>
+    </select><br/>
+
+    <button type="submit">Save</button>
+</form>
+
+<a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}">Back to Task List</a>
+</body>
+</html>

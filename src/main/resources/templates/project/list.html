@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Projects</title>
+</head>
+<body>
+<div th:replace="shared/header :: header"></div>
+
+<h1>All Projects</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.projectId}"></td>
+        <td>
+            <a th:href="@{/projects/{id}(id=${project.projectId})}" th:text="${project.name}"></a>
+        </td>
+        <td th:text="${project.description}"></td>
+        <td th:text="${project.startDate}"></td>
+        <td th:text="${project.endDate}"></td>
+        <td>
+            <a th:href="@{/projects/{id}/edit(id=${project.projectId})}">Edit</a> |
+            <a th:href="@{/projects/{id}/delete(id=${project.projectId})}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+</table>
+
+<a href="/projects/new">Create New Project</a>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${project.projectId == 0} ? 'Create Project' : 'Edit Project'">Project Form</title>
+</head>
+<body>
+<h1 th:text="${project.projectId == 0} ? 'Create New Project' : 'Edit Project'"></h1>
+
+<form th:action="${project.projectId == 0} ? @{/projects} : @{/projects/{id}/update(id=${project.projectId})}"
+      th:object="${project}" method="post">
+
+  <label>Name:</label>
+  <input type="text" th:field="*{name}" required/><br/>
+
+  <label>Description:</label>
+  <textarea th:field="*{description}"></textarea><br/>
+
+  <label>Start Date:</label>
+  <input type="date" th:field="*{startDate}"/><br/>
+
+  <label>End Date:</label>
+  <input type="date" th:field="*{endDate}"/><br/>
+
+  <button type="submit">Save</button>
+</form>
+
+<a href="/projects">Back to Project List</a>
+</body>
+</html>

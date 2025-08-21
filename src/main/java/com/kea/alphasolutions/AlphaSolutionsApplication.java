@@ -1,4 +1,4 @@
-package com.kea.AlphaSolutions;
+package com.kea.alphasolutions;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

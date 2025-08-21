@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Resources</title>
+</head>
+<body>
+<h1>All Resources</h1>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Role</th>
+    <th>System Role</th>
+    <th>Username</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="res : ${resources}">
+    <td th:text="${res.resourceId}"></td>
+    <td><a th:href="@{/resources/{id}(id=${res.resourceId})}" th:text="${res.name}"></a></td>
+    <td th:text="${res.role}"></td>
+    <td th:text="${res.systemRole}"></td>
+    <td th:text="${res.username}"></td>
+    <td>
+      <a th:href="@{/resources/{id}/edit(id=${res.resourceId})}">Edit</a> |
+      <a th:href="@{/resources/{id}/delete(id=${res.resourceId})}" onclick="return confirm('Are you sure?')">Delete</a>
+    </td>
+  </tr>
+</table>
+
+<a href="/resources/new">Create New Resource</a>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Alpha Solutions Project Tool</title>
+  <style>
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<!-- ✅ Define a fragment called "header" -->
+<header th:fragment="header">
+  <h2>Alpha Solutions Project Tool</h2>
+  <nav>
+    <a href="/projects">Projects</a>
+    <a href="/resources">Resources</a>
+  </nav>
+</header>
+</body>
+</html>

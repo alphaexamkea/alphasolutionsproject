@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Subprojects</title>
+</head>
+<body>
+<h1>Subprojects for Project [[${projectId}]]</h1>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Start</th>
+    <th>End</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="sub : ${subprojects}">
+    <td th:text="${sub.subprojectId}"></td>
+    <td><a th:href="@{/subprojects/{id}(id=${sub.subprojectId})}" th:text="${sub.name}"></a></td>
+    <td th:text="${sub.description}"></td>
+    <td th:text="${sub.startDate}"></td>
+    <td th:text="${sub.endDate}"></td>
+    <td>
+      <a th:href="@{/subprojects/{id}/edit(id=${sub.subprojectId})}">Edit</a> |
+      <a th:href="@{/subprojects/{id}/delete(id=${sub.subprojectId})}" onclick="return confirm('Are you sure?')">Delete</a>
+    </td>
+  </tr>
+</table>
+
+<a th:href="@{/projects/{id}/subprojects/new(id=${projectId})}">Create New Subproject</a> |
+<a href="/projects">Back to Projects</a>
+</body>
+</html>
