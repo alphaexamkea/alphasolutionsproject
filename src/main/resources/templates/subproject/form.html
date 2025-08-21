@@ -2,28 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title th:text="${subproject.subprojectId == 0} ? 'Create Subproject' : 'Edit Subproject'">Subproject Form</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<h1 th:text="${subproject.subprojectId == 0} ? 'Create New Subproject' : 'Edit Subproject'"></h1>
+<div th:replace="~{shared/header :: header}"></div>
 
-<form th:action="${subproject.subprojectId == 0} ? @{/projects/{pid}/subprojects(pid=${subproject.projectId})} : @{/subprojects/{id}/update(id=${subproject.subprojectId})}"
-      th:object="${subproject}" method="post">
+<main>
+  <div class="container">
+    <h1 th:text="${subproject.subprojectId == 0} ? 'Create New Subproject' : 'Edit Subproject'"></h1>
 
-  <label>Name:</label>
-  <input type="text" th:field="*{name}" required/><br/>
+    <form th:action="${subproject.subprojectId == 0} ? @{/projects/{pid}/subprojects(pid=${subproject.projectId})} : @{/subprojects/{id}/update(id=${subproject.subprojectId})}"
+          th:object="${subproject}" method="post">
 
-  <label>Description:</label>
-  <textarea th:field="*{description}"></textarea><br/>
+      <label>Name:</label>
+      <input type="text" th:field="*{name}" required/><br/>
 
-  <label>Start Date:</label>
-  <input type="date" th:field="*{startDate}"/><br/>
+      <label>Description:</label>
+      <textarea th:field="*{description}"></textarea><br/>
 
-  <label>End Date:</label>
-  <input type="date" th:field="*{endDate}"/><br/>
+      <label>Start Date:</label>
+      <input type="date" th:field="*{startDate}"/><br/>
 
-  <button type="submit">Save</button>
-</form>
+      <label>End Date:</label>
+      <input type="date" th:field="*{endDate}"/><br/>
 
-<a th:href="@{/projects/{id}/subprojects(id=${subproject.projectId})}">Back to Subproject List</a>
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+
+    <a th:href="@{/projects/{id}/subprojects(id=${subproject.projectId})}" class="btn">Back to Subproject List</a>
+  </div>
+</main>
 </body>
 </html>

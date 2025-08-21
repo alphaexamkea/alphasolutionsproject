@@ -4,6 +4,8 @@ import com.kea.alphasolutions.model.Project;
 import com.kea.alphasolutions.model.Subproject;
 import com.kea.alphasolutions.service.ProjectService;
 import com.kea.alphasolutions.service.SubprojectService;
+import com.kea.alphasolutions.service.TimeRegistrationService;
+import com.kea.alphasolutions.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +17,15 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final SubprojectService subprojectService;
+    private final TimeRegistrationService timeRegistrationService;
+    private final TaskService taskService;
 
-    public ProjectController(ProjectService projectService, SubprojectService subprojectService) {
+    public ProjectController(ProjectService projectService, SubprojectService subprojectService,
+                             TimeRegistrationService timeRegistrationService, TaskService taskService) {
         this.projectService = projectService;
         this.subprojectService = subprojectService;
+        this.timeRegistrationService = timeRegistrationService;
+        this.taskService = taskService;
     }
 
     // Show all projects
@@ -43,7 +50,6 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-    // Show project detail (with subprojects)
     @GetMapping("/projects/{id}")
     public String showProjectDetail(@PathVariable int id, Model model) {
         Project project = projectService.getProjectById(id);
@@ -53,8 +59,14 @@ public class ProjectController {
 
         List<Subproject> subprojects = subprojectService.getSubprojectsByProjectId(id);
 
+        // Add time calculations using existing methods
+        double totalHours = timeRegistrationService.getTotalHoursByProjectId(id);
+        double estimatedHours = taskService.getTotalEstimatedHoursByProjectId(id);
+
         model.addAttribute("project", project);
         model.addAttribute("subprojects", subprojects);
+        model.addAttribute("totalHours", totalHours);
+        model.addAttribute("estimatedHours", estimatedHours);
 
         return "project/detail";
     }

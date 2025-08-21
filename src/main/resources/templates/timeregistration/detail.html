@@ -2,18 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Time Registration Detail</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<h1>Time Registration Detail</h1>
+<div th:replace="~{shared/header :: header}"></div>
 
-<p><strong>Registration ID:</strong> <span th:text="${timeRegistration.timeId}"></span></p>
-<p><strong>Task ID:</strong> <span th:text="${timeRegistration.taskId}"></span></p>
-<p><strong>Resource ID:</strong> <span th:text="${timeRegistration.resourceId}"></span></p>
-<p><strong>Date:</strong> <span th:text="${timeRegistration.date}"></span></p>
-<p><strong>Hours:</strong> <span th:text="${timeRegistration.hours}"></span></p>
+<main>
+  <div class="container">
+    <h1>Time Registration Detail</h1>
 
-<a th:href="@{/timeregistrations/{id}/edit(id=${timeRegistration.timeId})}">Edit</a> |
-<a th:href="@{/timeregistrations/{id}/delete(id=${timeRegistration.timeId})}" onclick="return confirm('Are you sure?')">Delete</a> |
-<a th:href="@{/tasks/{id}/timeregistrations(id=${timeRegistration.taskId})}">Back to Time Registrations</a>
+    <p><strong>Registration ID:</strong> <span th:text="${timeRegistration.timeId}"></span></p>
+    <p><strong>Task ID:</strong> <span th:text="${timeRegistration.taskId}"></span></p>
+    <p><strong>Resource ID:</strong> <span th:text="${timeRegistration.resourceId}"></span></p>
+    <p><strong>Date:</strong> <span th:text="${timeRegistration.date}"></span></p>
+    <p><strong>Hours:</strong> <span th:text="${timeRegistration.hours}"></span></p>
+
+    <a th:href="@{/timeregistrations/{id}/edit(id=${timeRegistration.timeId})}" class="btn">Edit</a>
+    <a th:href="@{/timeregistrations/{id}/delete(id=${timeRegistration.timeId})}"
+       class="btn btn-danger"
+       onclick="return confirm('Are you sure?')">Delete</a>
+    <a th:href="@{/tasks/{id}/timeregistrations(id=${timeRegistration.taskId})}" class="btn">Back to Time Registrations</a>
+  </div>
+</main>
 </body>
 </html>

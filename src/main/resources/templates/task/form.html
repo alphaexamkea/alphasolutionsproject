@@ -2,64 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${task.taskId == 0} ? 'Create Task' : 'Edit Task'">Task Form</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<h1 th:text="${task.taskId == 0} ? 'Create New Task' : 'Edit Task'"></h1>
+<div th:replace="~{shared/header :: header}"></div>
 
-<!-- CREATE FORM -->
-<form th:if="${task.taskId == 0}"
-      th:action="@{/subprojects/{sid}/tasks(sid=${task.subprojectId})}"
-      th:object="${task}" method="post">
+<main>
+    <div class="container">
+        <h1 th:text="${task.taskId == 0} ? 'Create New Task' : 'Edit Task'"></h1>
 
-    <label>Name:</label>
-    <input type="text" th:field="*{name}" required/><br/>
+        <!-- CREATE FORM -->
+        <form th:if="${task.taskId == 0}"
+              th:action="@{/subprojects/{sid}/tasks(sid=${task.subprojectId})}"
+              th:object="${task}" method="post">
 
-    <label>Description:</label>
-    <textarea th:field="*{description}"></textarea><br/>
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" required/><br/>
 
-    <label>Estimated Hours:</label>
-    <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
+            <label>Description:</label>
+            <textarea th:field="*{description}"></textarea><br/>
 
-    <label>Deadline:</label>
-    <input type="date" th:field="*{deadline}"/><br/>
+            <label>Estimated Hours:</label>
+            <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
 
-    <label>Status:</label>
-    <select th:field="*{status}">
-        <option value="TO_DO">To Do</option>
-        <option value="IN_PROGRESS">In Progress</option>
-        <option value="DONE">Done</option>
-    </select><br/>
+            <label>Deadline:</label>
+            <input type="date" th:field="*{deadline}"/><br/>
 
-    <button type="submit">Save</button>
-</form>
+            <label>Status:</label>
+            <select th:field="*{status}">
+                <option value="TO_DO">To Do</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+            </select><br/>
 
-<!-- EDIT FORM -->
-<form th:if="${task.taskId != 0}"
-      th:action="@{/tasks/{id}/update(id=${task.taskId})}"
-      th:object="${task}" method="post">
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
 
-    <label>Name:</label>
-    <input type="text" th:field="*{name}" required/><br/>
+        <!-- EDIT FORM -->
+        <form th:if="${task.taskId != 0}"
+              th:action="@{/tasks/{id}/update(id=${task.taskId})}"
+              th:object="${task}" method="post">
 
-    <label>Description:</label>
-    <textarea th:field="*{description}"></textarea><br/>
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" required/><br/>
 
-    <label>Estimated Hours:</label>
-    <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
+            <label>Description:</label>
+            <textarea th:field="*{description}"></textarea><br/>
 
-    <label>Deadline:</label>
-    <input type="date" th:field="*{deadline}"/><br/>
+            <label>Estimated Hours:</label>
+            <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
 
-    <label>Status:</label>
-    <select th:field="*{status}">
-        <option value="TO_DO">To Do</option>
-        <option value="IN_PROGRESS">In Progress</option>
-        <option value="DONE">Done</option>
-    </select><br/>
+            <label>Deadline:</label>
+            <input type="date" th:field="*{deadline}"/><br/>
 
-    <button type="submit">Save</button>
-</form>
+            <label>Status:</label>
+            <select th:field="*{status}">
+                <option value="TO_DO">To Do</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+            </select><br/>
 
-<a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}">Back to Task List</a>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+
+        <a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}" class="btn">Back to Task List</a>
+    </div>
+</main>
 </body>
 </html>

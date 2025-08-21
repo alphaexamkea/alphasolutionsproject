@@ -1,29 +1,35 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title th:text="${project.projectId == 0} ? 'Create Project' : 'Edit Project'">Project Form</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<h1 th:text="${project.projectId == 0} ? 'Create New Project' : 'Edit Project'"></h1>
+<div th:replace="~{shared/header :: header}"></div>
 
-<form th:action="${project.projectId == 0} ? @{/projects} : @{/projects/{id}/update(id=${project.projectId})}"
-      th:object="${project}" method="post">
+<main>
+  <div class="container">
+    <h1 th:text="${project.projectId == 0} ? 'Create New Project' : 'Edit Project'"></h1>
 
-  <label>Name:</label>
-  <input type="text" th:field="*{name}" required/><br/>
+    <form th:action="${project.projectId == 0} ? @{/projects} : @{/projects/{id}/update(id=${project.projectId})}"
+          th:object="${project}" method="post">
 
-  <label>Description:</label>
-  <textarea th:field="*{description}"></textarea><br/>
+      <label>Name:</label>
+      <input type="text" th:field="*{name}" required/><br/>
 
-  <label>Start Date:</label>
-  <input type="date" th:field="*{startDate}"/><br/>
+      <label>Description:</label>
+      <textarea th:field="*{description}"></textarea><br/>
 
-  <label>End Date:</label>
-  <input type="date" th:field="*{endDate}"/><br/>
+      <label>Start Date:</label>
+      <input type="date" th:field="*{startDate}"/><br/>
 
-  <button type="submit">Save</button>
-</form>
+      <label>End Date:</label>
+      <input type="date" th:field="*{endDate}"/><br/>
 
-<a href="/projects">Back to Project List</a>
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+
+    <a href="/projects" class="btn">Back to Project List</a>
+  </div>
+</main>
 </body>
 </html>

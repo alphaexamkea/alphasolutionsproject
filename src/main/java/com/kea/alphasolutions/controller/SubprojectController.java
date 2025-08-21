@@ -1,7 +1,9 @@
 package com.kea.alphasolutions.controller;
 
 import com.kea.alphasolutions.model.Subproject;
+import com.kea.alphasolutions.model.TimeRegistration;
 import com.kea.alphasolutions.service.SubprojectService;
+import com.kea.alphasolutions.service.TimeRegistrationService;
 import com.kea.alphasolutions.service.TaskService;
 import com.kea.alphasolutions.model.Task;
 import org.springframework.stereotype.Controller;
@@ -14,12 +16,14 @@ import java.util.List;
 public class SubprojectController {
 
     private final SubprojectService subprojectService;
-    private final TaskService taskService; // ✅ add TaskService
+    private final TaskService taskService;
+    private final TimeRegistrationService timeRegistrationService;
 
 
-    public SubprojectController(SubprojectService subprojectService, TaskService taskService) {
+    public SubprojectController(SubprojectService subprojectService, TaskService taskService, TimeRegistrationService timeRegistrationService) {
         this.subprojectService = subprojectService;
         this.taskService = taskService;
+        this.timeRegistrationService = timeRegistrationService;
     }
 
 
@@ -58,8 +62,13 @@ public class SubprojectController {
         }
         List<Task> tasks = taskService.getTasksBySubprojectId(id);
 
+        double totalHours = timeRegistrationService.getTotalHoursBySubprojectId(id);
+        double estimatedHours = taskService.getTotalEstimatedHoursBySubprojectId(id);
+
         model.addAttribute("subproject", subproject);
-        model.addAttribute("tasks", tasks); // ✅ add tasks to model
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("totalHours", totalHours);
+        model.addAttribute("estimatedHours", estimatedHours);
 
         return "subproject/detail";
     }

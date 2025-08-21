@@ -2,34 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${resource.resourceId == 0} ? 'Create Resource' : 'Edit Resource'">Resource Form</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<h1 th:text="${resource.resourceId == 0} ? 'Create New Resource' : 'Edit Resource'"></h1>
+<div th:replace="~{shared/header :: header}"></div>
 
-<form th:action="${resource.resourceId == 0} ? @{/resources} : @{/resources/{id}/update(id=${resource.resourceId})}"
-      th:object="${resource}" method="post">
+<main>
+    <div class="container">
+        <h1 th:text="${resource.resourceId == 0} ? 'Create New Resource' : 'Edit Resource'"></h1>
 
-    <label>Name:</label>
-    <input type="text" th:field="*{name}" required/><br/>
+        <form th:action="${resource.resourceId == 0} ? @{/resources} : @{/resources/{id}/update(id=${resource.resourceId})}"
+              th:object="${resource}" method="post">
 
-    <label>Role:</label>
-    <input type="text" th:field="*{role}"/><br/>
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" required/><br/>
 
-    <label>System Role:</label>
-    <select th:field="*{systemRole}">
-        <option value="USER">USER</option>
-        <option value="ADMIN">ADMIN</option>
-    </select><br/>
+            <label>Role:</label>
+            <input type="text" th:field="*{role}"/><br/>
 
-    <label>Username:</label>
-    <input type="text" th:field="*{username}" required/><br/>
+            <label>System Role:</label>
+            <select th:field="*{systemRole}">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select><br/>
 
-    <label>Password:</label>
-    <input type="password" th:field="*{password}" required/><br/>
+            <label>Username:</label>
+            <input type="text" th:field="*{username}" required/><br/>
 
-    <button type="submit">Save</button>
-</form>
+            <label>Password:</label>
+            <input type="password" th:field="*{password}" required/><br/>
 
-<a href="/resources">Back to Resource List</a>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+
+        <a href="/resources" class="btn">Back to Resource List</a>
+    </div>
+</main>
 </body>
 </html>

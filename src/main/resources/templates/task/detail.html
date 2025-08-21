@@ -2,24 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Task Detail</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<h1 th:text="${task.name}"></h1>
-<p><strong>Description:</strong> <span th:text="${task.description}"></span></p>
-<p><strong>Estimated Hours:</strong> <span th:text="${task.estimatedHours}"></span></p>
-<p><strong>Deadline:</strong> <span th:text="${task.deadline}"></span></p>
-<p><strong>Status:</strong> <span th:text="${task.status}"></span></p>
+<div th:replace="~{shared/header :: header}"></div>
 
-<hr/>
+<main>
+  <div class="container">
+    <h1 th:text="${task.name}"></h1>
+    <p><strong>Description:</strong> <span th:text="${task.description}"></span></p>
+    <p><strong>Estimated Hours:</strong> <span th:text="${task.estimatedHours}"></span></p>
+    <p><strong>Deadline:</strong> <span th:text="${task.deadline}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${task.status}"></span></p>
 
-<h2>Time Tracking</h2>
-<p><a th:href="@{/tasks/{id}/timeregistrations(id=${task.taskId})}">View Time Registrations</a></p>
-<p><a th:href="@{/tasks/{id}/timeregistrations/new(id=${task.taskId})}">Register Time</a></p>
+    <hr/>
 
-<hr/>
+    <div>
+      <h3>⏱️ Time Summary</h3>
+      <p><strong>Estimated Hours:</strong> <span th:text="${task.estimatedHours}"></span></p>
+      <p><strong>Total Hours Logged:</strong> <span th:text="${totalHours}"></span></p>
+      <p><strong>Remaining:</strong>
+        <span th:text="${task.estimatedHours - totalHours}"></span>
+        <span th:if="${totalHours > task.estimatedHours}" style="color: red;">(OVER BUDGET)</span>
+      </p>
+    </div>
 
-<a th:href="@{/tasks/{id}/edit(id=${task.taskId})}">Edit</a> |
-<a th:href="@{/tasks/{id}/delete(id=${task.taskId})}" onclick="return confirm('Are you sure?')">Delete</a> |
-<a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}">Back to Task List</a>
+    <h2>Time Tracking</h2>
+    <a th:href="@{/tasks/{id}/timeregistrations(id=${task.taskId})}" class="btn">View Time Registrations</a>
+    <a th:href="@{/tasks/{id}/timeregistrations/new(id=${task.taskId})}" class="btn btn-success">Register Time</a>
+
+    <hr/>
+
+    <a th:href="@{/tasks/{id}/edit(id=${task.taskId})}" class="btn">Edit</a>
+    <a th:href="@{/tasks/{id}/delete(id=${task.taskId})}"
+       class="btn btn-danger"
+       onclick="return confirm('Are you sure?')">Delete</a>
+    <a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}" class="btn">Back to Task List</a>
+  </div>
+</main>
 </body>
 </html>
