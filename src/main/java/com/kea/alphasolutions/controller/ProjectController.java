@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProjectController {
@@ -32,7 +34,24 @@ public class ProjectController {
     @GetMapping("/projects")
     public String listProjects(Model model) {
         List<Project> projects = projectService.getAllProjects();
+        Map<Integer, Integer> subprojectsCounts = new HashMap<>();
+        Map<Integer, Integer> tasksCounts = new HashMap<>();
+        Map<Integer, Integer> resourcesCounts = new HashMap<>();
+        Map<Integer, Double> progressPercentages = new HashMap<>();
+
+        for (Project project : projects) {
+            int projectId = project.getProjectId();
+            subprojectsCounts.put(projectId, projectService.getSubprojectsCount(projectId));
+            tasksCounts.put(projectId, projectService.getTasksCount(projectId));
+            resourcesCounts.put(projectId, projectService.getResourcesCount(projectId));
+            progressPercentages.put(projectId, projectService.getProgressPercentage(projectId));
+        }
+
         model.addAttribute("projects", projects);
+        model.addAttribute("subprojectsCounts", subprojectsCounts);
+        model.addAttribute("tasksCounts", tasksCounts);
+        model.addAttribute("resourcesCounts", resourcesCounts);
+        model.addAttribute("progressPercentages", progressPercentages);
         return "project/list";
     }
 
