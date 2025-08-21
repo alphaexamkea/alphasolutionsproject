@@ -9,39 +9,66 @@
 
 <main>
     <div class="container">
-        <h1>All Projects</h1>
+        <div class="projects-header">
+            <div class="projects-title-section">
+                <h1>Projects</h1>
+                <p class="projects-subtitle">Manage and track all your projects in one place.</p>
+            </div>
+            <a href="/projects/new" class="btn btn-primary">+ New Project</a>
+        </div>
 
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="project : ${projects}">
-                <td th:text="${project.projectId}"></td>
-                <td>
-                    <a th:href="@{/projects/{id}(id=${project.projectId})}" th:text="${project.name}"></a>
-                </td>
-                <td th:text="${project.description}"></td>
-                <td th:text="${project.startDate}"></td>
-                <td th:text="${project.endDate}"></td>
-                <td>
-                    <a th:href="@{/projects/{id}/edit(id=${project.projectId})}" class="btn">Edit</a>
+        <div class="projects-grid">
+            <div class="project-card" th:each="project : ${projects}">
+                <div class="card-header">
+                    <h3 class="project-title" th:text="${project.name}"></h3>
+                    <p class="project-description" th:text="${project.description}"></p>
+                </div>
+
+                <div class="card-dates">
+                    <div class="date-section">
+                        <label>START DATE</label>
+                        <span th:text="${project.startDate}"></span>
+                    </div>
+                    <div class="date-section">
+                        <label>DUE DATE</label>
+                        <span th:text="${project.endDate}"></span>
+                    </div>
+                </div>
+
+                <div class="card-metrics">
+                    <div class="metric">
+                        <span class="metric-number" th:text="${subprojectsCounts[project.projectId]}"></span>
+                        <span class="metric-label">Subprojects</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-number" th:text="${tasksCounts[project.projectId]}"></span>
+                        <span class="metric-label">Tasks</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-number" th:text="${resourcesCounts[project.projectId]}"></span>
+                        <span class="metric-label">Team</span>
+                    </div>
+                </div>
+
+                <div class="card-progress">
+                    <div class="progress-header">
+                        <span>Progress</span>
+                        <span class="progress-percentage" th:text="${#numbers.formatDecimal(progressPercentages[project.projectId], 0, 0)} + '%'"></span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" th:style="'width: ' + ${progressPercentages[project.projectId]} + '%'"></div>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <a th:href="@{/projects/{id}(id=${project.projectId})}" class="btn btn-outline">View Details</a>
+                    <a th:href="@{/projects/{id}/edit(id=${project.projectId})}" class="btn btn-outline">Edit</a>
                     <a th:href="@{/projects/{id}/delete(id=${project.projectId})}"
                        class="btn btn-danger"
                        onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <a href="/projects/new" class="btn btn-success">Create New Project</a>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 </body>

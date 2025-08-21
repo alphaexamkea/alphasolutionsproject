@@ -10,9 +10,15 @@ import java.util.List;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final TimeRegistrationService timeRegistrationService;
+    private final TaskService taskService;
 
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository,
+                          TimeRegistrationService timeRegistrationService,
+                          TaskService taskService) {
         this.projectRepository = projectRepository;
+        this.timeRegistrationService = timeRegistrationService;
+        this.taskService = taskService;
     }
 
     public List<Project> getAllProjects() {
@@ -33,5 +39,28 @@ public class ProjectService {
 
     public void deleteProject(int id) {
         projectRepository.delete(id);
+    }
+
+    public int getSubprojectsCount(int projectId) {
+        return projectRepository.countSubprojectsByProjectId(projectId);
+    }
+
+    public int getTasksCount(int projectId) {
+        return projectRepository.countTasksByProjectId(projectId);
+    }
+
+    public int getResourcesCount(int projectId) {
+        return projectRepository.countResourcesByProjectId(projectId);
+    }
+
+    public double getProgressPercentage(int projectId) {
+        double totalHours = timeRegistrationService.getTotalHoursByProjectId(projectId);
+        double estimatedHours = taskService.getTotalEstimatedHoursByProjectId(projectId);
+
+        if (estimatedHours > 0) {
+            double progress = (totalHours / estimatedHours) * 100;
+            return progress > 100 ? 100 : progress;
+        }
+        return 0.0;
     }
 }
