@@ -2,6 +2,7 @@ package com.kea.alphasolutions.controller;
 
 import com.kea.alphasolutions.model.Project;
 import com.kea.alphasolutions.model.Subproject;
+import com.kea.alphasolutions.model.Task;
 import com.kea.alphasolutions.service.ProjectService;
 import com.kea.alphasolutions.service.SubprojectService;
 import com.kea.alphasolutions.service.TimeRegistrationService;
@@ -82,10 +83,53 @@ public class ProjectController {
         double totalHours = timeRegistrationService.getTotalHoursByProjectId(id);
         double estimatedHours = taskService.getTotalEstimatedHoursByProjectId(id);
 
+        // Calculate metrics for each subproject
+        Map<Integer, Integer> taskCounts = new HashMap<>();
+        Map<Integer, Double> subprojectProgress = new HashMap<>();
+        Map<Integer, Double> subprojectEstimatedHours = new HashMap<>();
+        Map<Integer, Double> subprojectLoggedHours = new HashMap<>();
+
+        for (Subproject subproject : subprojects) {
+            int subprojectId = subproject.getSubprojectId();
+
+            // Task count
+            List<Task> tasks = taskService.getTasksBySubprojectId(subprojectId);
+            taskCounts.put(subprojectId, tasks.size());
+
+            // Hours calculations
+            double subEstimated = taskService.getTotalEstimatedHoursBySubprojectId(subprojectId);
+            double subLogged = timeRegistrationService.getTotalHoursBySubprojectId(subprojectId);
+
+            subprojectEstimatedHours.put(subprojectId, subEstimated);
+            subprojectLoggedHours.put(subprojectId, subLogged);
+
+            // Progress calculation
+            double progress = 0.0;
+            if (subEstimated > 0) {
+                progress = (subLogged / subEstimated) * 100;
+                progress = progress > 100 ? 100 : progress;
+            }
+            subprojectProgress.put(subprojectId, progress);
+        }
+
+        // Project-level metrics
+        int totalSubprojects = subprojects.size();
+        int totalTasks = projectService.getTasksCount(id);
+        int totalResources = projectService.getResourcesCount(id);
+        double projectProgress = projectService.getProgressPercentage(id);
+
         model.addAttribute("project", project);
         model.addAttribute("subprojects", subprojects);
         model.addAttribute("totalHours", totalHours);
         model.addAttribute("estimatedHours", estimatedHours);
+        model.addAttribute("taskCounts", taskCounts);
+        model.addAttribute("subprojectProgress", subprojectProgress);
+        model.addAttribute("subprojectEstimatedHours", subprojectEstimatedHours);
+        model.addAttribute("subprojectLoggedHours", subprojectLoggedHours);
+        model.addAttribute("totalSubprojects", totalSubprojects);
+        model.addAttribute("totalTasks", totalTasks);
+        model.addAttribute("totalResources", totalResources);
+        model.addAttribute("projectProgress", projectProgress);
 
         return "project/detail";
     }
