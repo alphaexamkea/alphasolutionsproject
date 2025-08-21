@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${resource.resourceId == 0} ? 'Create Resource' : 'Edit Resource'">Resource Form</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1 th:text="${resource.resourceId == 0} ? 'Create New Resource' : 'Edit Resource'"></h1>
 
 <form th:action="${resource.resourceId == 0} ? @{/resources} : @{/resources/{id}/update(id=${resource.resourceId})}"

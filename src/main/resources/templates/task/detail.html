@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Task Detail</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1 th:text="${task.name}"></h1>
 <p><strong>Description:</strong> <span th:text="${task.description}"></span></p>
 <p><strong>Estimated Hours:</strong> <span th:text="${task.estimatedHours}"></span></p>

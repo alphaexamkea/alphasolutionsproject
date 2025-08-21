@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Resources</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1>All Resources</h1>
 
 <table border="1">

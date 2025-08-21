@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title th:text="${subproject.subprojectId == 0} ? 'Create Subproject' : 'Edit Subproject'">Subproject Form</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1 th:text="${subproject.subprojectId == 0} ? 'Create New Subproject' : 'Edit Subproject'"></h1>
 
 <form th:action="${subproject.subprojectId == 0} ? @{/projects/{pid}/subprojects(pid=${subproject.projectId})} : @{/subprojects/{id}/update(id=${subproject.subprojectId})}"

@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title th:text="${timeRegistration.timeId == 0} ? 'Register Time' : 'Edit Time Registration'">Time Registration Form</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1 th:text="${timeRegistration.timeId == 0} ? 'Register New Time' : 'Edit Time Registration'"></h1>
 
 <!-- CREATE FORM -->

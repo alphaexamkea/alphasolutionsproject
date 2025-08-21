@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${task.taskId == 0} ? 'Create Task' : 'Edit Task'">Task Form</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1 th:text="${task.taskId == 0} ? 'Create New Task' : 'Edit Task'"></h1>
 
 <!-- CREATE FORM -->

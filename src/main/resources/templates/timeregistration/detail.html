@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Time Registration Detail</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1>Time Registration Detail</h1>
 
 <p><strong>Registration ID:</strong> <span th:text="${timeRegistration.timeId}"></span></p>

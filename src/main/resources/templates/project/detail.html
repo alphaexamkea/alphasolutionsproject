@@ -2,8 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Project Detail</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
 <h1 th:text="${project.name}"></h1>
 <p><strong>Description:</strong> <span th:text="${project.description}"></span></p>
 <p><strong>Start Date:</strong> <span th:text="${project.startDate}"></span></p>
@@ -12,7 +15,7 @@
 <hr/>
 
 <h2>Subprojects</h2>
-<table border="1">
+<table>
     <tr>
         <th>ID</th>
         <th>Name</th>

@@ -2,9 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Projects</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
-<div th:replace="shared/header :: header"></div>
+<div th:replace="~{shared/header :: header}"></div>
 
 <h1>All Projects</h1>
 

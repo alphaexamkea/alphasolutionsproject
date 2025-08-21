@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Resource Detail</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
 <body>
+<div th:replace="~{shared/header :: header}"></div>
+
 <h1 th:text="${resource.name}"></h1>
 <p><strong>Role:</strong> <span th:text="${resource.role}"></span></p>
 <p><strong>System Role:</strong> <span th:text="${resource.systemRole}"></span></p>
