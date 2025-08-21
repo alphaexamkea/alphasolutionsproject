@@ -3,45 +3,62 @@
 <head>
   <title>Subproject Detail</title>
   <link rel="stylesheet" th:href="@{/css/main.css}">
-
 </head>
 <body>
 <div th:replace="~{shared/header :: header}"></div>
 
-<h1 th:text="${subproject.name}"></h1>
-<p><strong>Description:</strong> <span th:text="${subproject.description}"></span></p>
-<p><strong>Start Date:</strong> <span th:text="${subproject.startDate}"></span></p>
-<p><strong>End Date:</strong> <span th:text="${subproject.endDate}"></span></p>
+<main>
+  <div class="container">
+    <h1 th:text="${subproject.name}"></h1>
+    <p><strong>Description:</strong> <span th:text="${subproject.description}"></span></p>
+    <p><strong>Start Date:</strong> <span th:text="${subproject.startDate}"></span></p>
+    <p><strong>End Date:</strong> <span th:text="${subproject.endDate}"></span></p>
 
-<hr/>
+    <hr/>
+    <div>
+      <h3>📊 Subproject Time Summary</h3>
+      <p><strong>Total Estimated Hours:</strong> <span th:text="${estimatedHours}"></span></p>
+      <p><strong>Total Hours Logged:</strong> <span th:text="${totalHours}"></span></p>
+      <p><strong>Remaining Hours:</strong> <span th:text="${estimatedHours - totalHours}"></span></p>
+    </div>
 
-<h2>Tasks</h2>
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Status</th>
-    <th>Deadline</th>
-    <th>Actions</th>
-  </tr>
-  <tr th:each="task : ${tasks}">
-    <td th:text="${task.taskId}"></td>
-    <td><a th:href="@{/tasks/{id}(id=${task.taskId})}" th:text="${task.name}"></a></td>
-    <td th:text="${task.status}"></td>
-    <td th:text="${task.deadline}"></td>
-    <td>
-      <a th:href="@{/tasks/{id}/edit(id=${task.taskId})}">Edit</a> |
-      <a th:href="@{/tasks/{id}/delete(id=${task.taskId})}" onclick="return confirm('Are you sure?')">Delete</a>
-    </td>
-  </tr>
-</table>
+    <h2>Tasks</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Deadline</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="task : ${tasks}">
+        <td th:text="${task.taskId}"></td>
+        <td><a th:href="@{/tasks/{id}(id=${task.taskId})}" th:text="${task.name}"></a></td>
+        <td th:text="${task.status}"></td>
+        <td th:text="${task.deadline}"></td>
+        <td>
+          <a th:href="@{/tasks/{id}/edit(id=${task.taskId})}" class="btn">Edit</a>
+          <a th:href="@{/tasks/{id}/delete(id=${task.taskId})}"
+             class="btn btn-danger"
+             onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-<a th:href="@{/subprojects/{id}/tasks/new(id=${subproject.subprojectId})}">Create New Task</a>
+    <a th:href="@{/subprojects/{id}/tasks/new(id=${subproject.subprojectId})}" class="btn btn-success">Create New Task</a>
 
-<hr/>
+    <hr/>
 
-<a th:href="@{/subprojects/{id}/edit(id=${subproject.subprojectId})}">Edit Subproject</a> |
-<a th:href="@{/subprojects/{id}/delete(id=${subproject.subprojectId})}" onclick="return confirm('Are you sure?')">Delete Subproject</a> |
-<a th:href="@{/projects/{id}(id=${subproject.projectId})}">Back to Project</a>
+    <a th:href="@{/subprojects/{id}/edit(id=${subproject.subprojectId})}" class="btn">Edit Subproject</a>
+    <a th:href="@{/subprojects/{id}/delete(id=${subproject.subprojectId})}"
+       class="btn btn-danger"
+       onclick="return confirm('Are you sure?')">Delete Subproject</a>
+    <a th:href="@{/projects/{id}(id=${subproject.projectId})}" class="btn">Back to Project</a>
+  </div>
+</main>
 </body>
 </html>

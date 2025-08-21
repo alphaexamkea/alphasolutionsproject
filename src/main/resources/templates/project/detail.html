@@ -3,46 +3,68 @@
 <head>
     <title>Project Detail</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
-
 </head>
 <body>
 <div th:replace="~{shared/header :: header}"></div>
-<h1 th:text="${project.name}"></h1>
-<p><strong>Description:</strong> <span th:text="${project.description}"></span></p>
-<p><strong>Start Date:</strong> <span th:text="${project.startDate}"></span></p>
-<p><strong>End Date:</strong> <span th:text="${project.endDate}"></span></p>
 
-<hr/>
+<main>
+    <div class="container">
+        <h1 th:text="${project.name}"></h1>
+        <p><strong>Description:</strong> <span th:text="${project.description}"></span></p>
+        <p><strong>Start Date:</strong> <span th:text="${project.startDate}"></span></p>
+        <p><strong>End Date:</strong> <span th:text="${project.endDate}"></span></p>
 
-<h2>Subprojects</h2>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Actions</th>
-    </tr>
-    <tr th:each="sub : ${subprojects}">
-        <td th:text="${sub.subprojectId}"></td>
-        <td><a th:href="@{/subprojects/{id}(id=${sub.subprojectId})}" th:text="${sub.name}"></a></td>
-        <td th:text="${sub.description}"></td>
-        <td th:text="${sub.startDate}"></td>
-        <td th:text="${sub.endDate}"></td>
-        <td>
-            <a th:href="@{/subprojects/{id}/edit(id=${sub.subprojectId})}">Edit</a> |
-            <a th:href="@{/subprojects/{id}/delete(id=${sub.subprojectId})}" onclick="return confirm('Are you sure?')">Delete</a>
-        </td>
-    </tr>
-</table>
+        <hr/>
+        <div>
+            <h3>📊 Project Time Overview</h3>
+            <p><strong>Total Estimated Hours:</strong> <span th:text="${estimatedHours}"></span></p>
+            <p><strong>Total Hours Logged:</strong> <span th:text="${totalHours}"></span></p>
+            <p><strong>Remaining Hours:</strong> <span th:text="${estimatedHours - totalHours}"></span></p>
+            <p><strong>Status:</strong>
+                <span th:if="${totalHours <= estimatedHours}">✅ On Track</span>
+                <span th:if="${totalHours > estimatedHours}">⚠️ Over Budget</span>
+            </p>
+        </div>
 
-<a th:href="@{/projects/{id}/subprojects/new(id=${project.projectId})}">Create New Subproject</a>
+        <h2>Subprojects</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sub : ${subprojects}">
+                <td th:text="${sub.subprojectId}"></td>
+                <td><a th:href="@{/subprojects/{id}(id=${sub.subprojectId})}" th:text="${sub.name}"></a></td>
+                <td th:text="${sub.description}"></td>
+                <td th:text="${sub.startDate}"></td>
+                <td th:text="${sub.endDate}"></td>
+                <td>
+                    <a th:href="@{/subprojects/{id}/edit(id=${sub.subprojectId})}" class="btn">Edit</a>
+                    <a th:href="@{/subprojects/{id}/delete(id=${sub.subprojectId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-<hr/>
+        <a th:href="@{/projects/{id}/subprojects/new(id=${project.projectId})}" class="btn btn-success">Create New Subproject</a>
 
-<a th:href="@{/projects/{id}/edit(id=${project.projectId})}">Edit Project</a> |
-<a th:href="@{/projects/{id}/delete(id=${project.projectId})}" onclick="return confirm('Are you sure?')">Delete Project</a> |
-<a href="/projects">Back to Project List</a>
+        <hr/>
+
+        <a th:href="@{/projects/{id}/edit(id=${project.projectId})}" class="btn">Edit Project</a>
+        <a th:href="@{/projects/{id}/delete(id=${project.projectId})}"
+           class="btn btn-danger"
+           onclick="return confirm('Are you sure?')">Delete Project</a>
+        <a href="/projects" class="btn">Back to Project List</a>
+    </div>
+</main>
 </body>
 </html>

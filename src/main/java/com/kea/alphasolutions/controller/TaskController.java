@@ -2,6 +2,7 @@ package com.kea.alphasolutions.controller;
 
 import com.kea.alphasolutions.model.Task;
 import com.kea.alphasolutions.service.TaskService;
+import com.kea.alphasolutions.service.TimeRegistrationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
+    private final TimeRegistrationService timeRegistrationService;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, TimeRegistrationService timeRegistrationService) {
         this.taskService = taskService;
+        this.timeRegistrationService = timeRegistrationService;
     }
 
     // List tasks for a subproject
@@ -51,7 +54,11 @@ public class TaskController {
         if (task == null) {
             return "shared/error";
         }
+
+        double totalHours = timeRegistrationService.getTotalHoursByTaskId(id);
+
         model.addAttribute("task", task);
+        model.addAttribute("totalHours", totalHours);
         return "task/detail";
     }
 

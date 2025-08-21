@@ -3,35 +3,44 @@
 <head>
   <title>Resources</title>
   <link rel="stylesheet" th:href="@{/css/main.css}">
-
 </head>
 <body>
 <div th:replace="~{shared/header :: header}"></div>
 
-<h1>All Resources</h1>
+<main>
+  <div class="container">
+    <h1>All Resources</h1>
 
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Role</th>
-    <th>System Role</th>
-    <th>Username</th>
-    <th>Actions</th>
-  </tr>
-  <tr th:each="res : ${resources}">
-    <td th:text="${res.resourceId}"></td>
-    <td><a th:href="@{/resources/{id}(id=${res.resourceId})}" th:text="${res.name}"></a></td>
-    <td th:text="${res.role}"></td>
-    <td th:text="${res.systemRole}"></td>
-    <td th:text="${res.username}"></td>
-    <td>
-      <a th:href="@{/resources/{id}/edit(id=${res.resourceId})}">Edit</a> |
-      <a th:href="@{/resources/{id}/delete(id=${res.resourceId})}" onclick="return confirm('Are you sure?')">Delete</a>
-    </td>
-  </tr>
-</table>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>System Role</th>
+        <th>Username</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="res : ${resources}">
+        <td th:text="${res.resourceId}"></td>
+        <td><a th:href="@{/resources/{id}(id=${res.resourceId})}" th:text="${res.name}"></a></td>
+        <td th:text="${res.role}"></td>
+        <td th:text="${res.systemRole}"></td>
+        <td th:text="${res.username}"></td>
+        <td>
+          <a th:href="@{/resources/{id}/edit(id=${res.resourceId})}" class="btn">Edit</a>
+          <a th:href="@{/resources/{id}/delete(id=${res.resourceId})}"
+             class="btn btn-danger"
+             onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-<a href="/resources/new">Create New Resource</a>
+    <a href="/resources/new" class="btn btn-success">Create New Resource</a>
+  </div>
+</main>
 </body>
 </html>

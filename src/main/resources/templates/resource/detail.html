@@ -3,18 +3,23 @@
 <head>
   <title>Resource Detail</title>
   <link rel="stylesheet" th:href="@{/css/main.css}">
-
 </head>
 <body>
 <div th:replace="~{shared/header :: header}"></div>
 
-<h1 th:text="${resource.name}"></h1>
-<p><strong>Role:</strong> <span th:text="${resource.role}"></span></p>
-<p><strong>System Role:</strong> <span th:text="${resource.systemRole}"></span></p>
-<p><strong>Username:</strong> <span th:text="${resource.username}"></span></p>
+<main>
+  <div class="container">
+    <h1 th:text="${resource.name}"></h1>
+    <p><strong>Role:</strong> <span th:text="${resource.role}"></span></p>
+    <p><strong>System Role:</strong> <span th:text="${resource.systemRole}"></span></p>
+    <p><strong>Username:</strong> <span th:text="${resource.username}"></span></p>
 
-<a th:href="@{/resources/{id}/edit(id=${resource.resourceId})}">Edit</a> |
-<a th:href="@{/resources/{id}/delete(id=${resource.resourceId})}" onclick="return confirm('Are you sure?')">Delete</a> |
-<a href="/resources">Back to Resource List</a>
+    <a th:href="@{/resources/{id}/edit(id=${resource.resourceId})}" class="btn">Edit</a>
+    <a th:href="@{/resources/{id}/delete(id=${resource.resourceId})}"
+       class="btn btn-danger"
+       onclick="return confirm('Are you sure?')">Delete</a>
+    <a href="/resources" class="btn">Back to Resource List</a>
+  </div>
+</main>
 </body>
 </html>
