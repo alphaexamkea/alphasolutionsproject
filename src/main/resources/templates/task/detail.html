@@ -10,6 +10,14 @@
 <p><strong>Deadline:</strong> <span th:text="${task.deadline}"></span></p>
 <p><strong>Status:</strong> <span th:text="${task.status}"></span></p>
 
+<hr/>
+
+<h2>Time Tracking</h2>
+<p><a th:href="@{/tasks/{id}/timeregistrations(id=${task.taskId})}">View Time Registrations</a></p>
+<p><a th:href="@{/tasks/{id}/timeregistrations/new(id=${task.taskId})}">Register Time</a></p>
+
+<hr/>
+
 <a th:href="@{/tasks/{id}/edit(id=${task.taskId})}">Edit</a> |
 <a th:href="@{/tasks/{id}/delete(id=${task.taskId})}" onclick="return confirm('Are you sure?')">Delete</a> |
 <a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}">Back to Task List</a>

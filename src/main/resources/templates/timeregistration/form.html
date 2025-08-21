@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${timeRegistration.timeId == 0} ? 'Register Time' : 'Edit Time Registration'">Time Registration Form</title>
+</head>
+<body>
+<h1 th:text="${timeRegistration.timeId == 0} ? 'Register New Time' : 'Edit Time Registration'"></h1>
+
+<!-- CREATE FORM -->
+<form th:if="${timeRegistration.timeId == 0}"
+      th:action="@{/tasks/{tid}/timeregistrations(tid=${timeRegistration.taskId})}"
+      th:object="${timeRegistration}" method="post">
+
+  <label>Resource:</label>
+  <select th:field="*{resourceId}" required>
+    <option value="">Select Resource</option>
+    <option th:each="resource : ${resources}"
+            th:value="${resource.resourceId}"
+            th:text="${resource.name}">
+    </option>
+  </select><br/>
+
+  <label>Date:</label>
+  <input type="date" th:field="*{date}" required/><br/>
+
+  <label>Hours:</label>
+  <input type="number" th:field="*{hours}" step="0.25" min="0" max="24" required/><br/>
+
+  <button type="submit">Register Time</button>
+</form>
+
+<!-- EDIT FORM -->
+<form th:if="${timeRegistration.timeId != 0}"
+      th:action="@{/timeregistrations/{id}/update(id=${timeRegistration.timeId})}"
+      th:object="${timeRegistration}" method="post">
+
+  <label>Resource:</label>
+  <select th:field="*{resourceId}" required>
+    <option value="">Select Resource</option>
+    <option th:each="resource : ${resources}"
+            th:value="${resource.resourceId}"
+            th:text="${resource.name}">
+    </option>
+  </select><br/>
+
+  <label>Date:</label>
+  <input type="date" th:field="*{date}" required/><br/>
+
+  <label>Hours:</label>
+  <input type="number" th:field="*{hours}" step="0.25" min="0" max="24" required/><br/>
+
+  <button type="submit">Update</button>
+</form>
+
+<a th:href="@{/tasks/{id}/timeregistrations(id=${timeRegistration.taskId})}">Back to Time Registrations</a>
+</body>
+</html>
