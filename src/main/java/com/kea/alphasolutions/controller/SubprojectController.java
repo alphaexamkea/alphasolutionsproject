@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class SubprojectController {
@@ -56,10 +58,17 @@ public class SubprojectController {
         double totalHours = timeRegistrationService.getTotalHoursBySubprojectId(id);
         double estimatedHours = taskService.getTotalEstimatedHoursBySubprojectId(id);
 
+        Map<Integer, Double> taskHours = new HashMap<>();
+        for (Task task : tasks) {
+            double hours = timeRegistrationService.getTotalHoursByTaskId(task.getTaskId());
+            taskHours.put(task.getTaskId(), hours);
+        }
+
         model.addAttribute("subproject", subproject);
         model.addAttribute("tasks", tasks);
         model.addAttribute("totalHours", totalHours);
         model.addAttribute("estimatedHours", estimatedHours);
+        model.addAttribute("taskHours", taskHours);
 
         return "subproject/detail";
     }

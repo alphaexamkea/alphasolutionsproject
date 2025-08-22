@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Time Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div th:replace="~{shared/header :: header}"></div>
+
+<main>
+    <div class="container">
+        <div class="projects-header">
+            <div class="projects-title-section">
+                <h1>Time Tracker</h1>
+                <p class="projects-subtitle">Overview of time tracking across all resources and projects.</p>
+            </div>
+        </div>
+
+        <div class="projects-grid" th:if="${!resources.isEmpty()}">
+            <div class="project-card" th:each="resource : ${resources}">
+                <div class="card-header">
+                    <h3 class="project-title" th:text="${resource.name}">Resource Name</h3>
+                    <p class="project-description" th:text="${resource.role + ' • ID: ' + resource.resourceId}">Role • ID</p>
+                </div>
+
+                <div class="card-metrics">
+                    <div class="metric">
+                        <span class="metric-number" th:text="${#numbers.formatDecimal(timeRegistrationService.getTotalHoursByResourceId(resource.resourceId), 0, 1)}">0</span>
+                        <span class="metric-label">Total Hours</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-number" th:text="${timeRegistrationService.getTimeRegistrationsByResourceId(resource.resourceId).size()}">0</span>
+                        <span class="metric-label">Time Entries</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-number">
+                            <span class="status-badge"
+                                  th:classappend="${resource.systemRole == 'ADMIN' ? 'status-warning' : 'status-info'}"
+                                  th:text="${resource.systemRole}">ROLE</span>
+                        </span>
+                        <span class="metric-label">System Role</span>
+                    </div>
+                </div>
+
+                <div class="card-progress">
+                    <div class="progress-header">
+                        <span>Activity Level</span>
+                        <span class="progress-percentage"
+                              th:text="${timeRegistrationService.getTimeRegistrationsByResourceId(resource.resourceId).size() > 10 ? 'High' :
+                                       timeRegistrationService.getTimeRegistrationsByResourceId(resource.resourceId).size() > 5 ? 'Medium' : 'Low'}">Low</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"
+                             th:style="'width: ' + ${timeRegistrationService.getTimeRegistrationsByResourceId(resource.resourceId).size() > 10 ? '100' :
+                                      timeRegistrationService.getTimeRegistrationsByResourceId(resource.resourceId).size() > 5 ? '66' : '33'} + '%'"></div>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <a th:href="@{/resources/{id}(id=${resource.resourceId})}" class="btn btn-outline">View Details</a>
+                    <a th:href="@{/resources/{id}/edit(id=${resource.resourceId})}" class="btn btn-outline">Edit</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-message" th:if="${resources.isEmpty()}">
+            <p>No resources found to track time for.</p>
+            <a href="/resources/new" class="btn btn-primary">Add your first resource</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

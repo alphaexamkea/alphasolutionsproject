@@ -55,6 +55,23 @@ public class TimeRegistrationService {
         return timeRegistrationRepository.getTotalHoursByProjectId(projectId);
     }
 
+    public double getTotalHoursByResourceId(int resourceId) {
+        List<TimeRegistration> timeRegistrations = timeRegistrationRepository.findAllByResourceId(resourceId);
+        double total = 0.0;
+        for (TimeRegistration tr : timeRegistrations) {
+            total += tr.getHours();
+        }
+        return total;
+    }
+
+    public List<TimeRegistration> getRecentTimeEntriesByResourceId(int resourceId, int limit) {
+        List<TimeRegistration> allEntries = timeRegistrationRepository.findAllByResourceId(resourceId);
+        if (allEntries.size() <= limit) {
+            return allEntries;
+        }
+        return allEntries.subList(0, limit);
+    }
+
     private void autoUpdateTaskStatus(int taskId) {
         Task task = taskService.getTaskById(taskId);
         if (task != null && "TO_DO".equals(task.getStatus())) {

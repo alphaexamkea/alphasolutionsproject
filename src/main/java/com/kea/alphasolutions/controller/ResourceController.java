@@ -1,7 +1,10 @@
 package com.kea.alphasolutions.controller;
 
 import com.kea.alphasolutions.model.Resource;
+import com.kea.alphasolutions.model.TimeRegistration;
 import com.kea.alphasolutions.service.ResourceService;
+import com.kea.alphasolutions.service.TimeRegistrationService;
+import com.kea.alphasolutions.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +15,13 @@ import java.util.List;
 public class ResourceController {
 
     private final ResourceService resourceService;
+    private final TimeRegistrationService timeRegistrationService;
+    private final TaskService taskService;
 
-    public ResourceController(ResourceService resourceService) {
+    public ResourceController(ResourceService resourceService, TimeRegistrationService timeRegistrationService, TaskService taskService) {
         this.resourceService = resourceService;
+        this.timeRegistrationService = timeRegistrationService;
+        this.taskService = taskService;
     }
 
     // List all resources
@@ -46,7 +53,14 @@ public class ResourceController {
         if (resource == null) {
             return "shared/error";
         }
+
+        List<TimeRegistration> recentTimeEntries = timeRegistrationService.getRecentTimeEntriesByResourceId(id, 10);
+        double totalHours = timeRegistrationService.getTotalHoursByResourceId(id);
+
         model.addAttribute("resource", resource);
+        model.addAttribute("recentTimeEntries", recentTimeEntries);
+        model.addAttribute("totalHours", totalHours);
+        model.addAttribute("taskService", taskService);
         return "resource/detail";
     }
 
