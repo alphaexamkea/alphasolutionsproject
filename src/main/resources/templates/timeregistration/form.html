@@ -9,55 +9,88 @@
 
 <main>
   <div class="container">
-    <h1 th:text="${timeRegistration.timeId == 0} ? 'Register New Time' : 'Edit Time Registration'"></h1>
+    <div class="form-container">
+      <div class="form-header">
+        <h1 class="form-title" th:text="${timeRegistration.timeId == 0} ? 'Register New Time' : 'Edit Time Registration'"></h1>
+        <p class="form-subtitle" th:text="${timeRegistration.timeId == 0} ? 'Track time spent on this task' : 'Update time registration details'"></p>
+      </div>
 
-    <!-- CREATE FORM -->
-    <form th:if="${timeRegistration.timeId == 0}"
-          th:action="@{/tasks/{tid}/timeregistrations(tid=${timeRegistration.taskId})}"
-          th:object="${timeRegistration}" method="post">
+      <!-- CREATE FORM -->
+      <form th:if="${timeRegistration.timeId == 0}"
+            th:action="@{/tasks/{tid}/timeregistrations(tid=${timeRegistration.taskId})}"
+            th:object="${timeRegistration}" method="post">
 
-      <label>Resource:</label>
-      <select th:field="*{resourceId}" required>
-        <option value="">Select Resource</option>
-        <option th:each="resource : ${resources}"
-                th:value="${resource.resourceId}"
-                th:text="${resource.name}">
-        </option>
-      </select><br/>
+        <div class="form-group">
+          <label class="form-label" for="resourceId">Team Member</label>
+          <select id="resourceId" class="form-select" th:field="*{resourceId}" required>
+            <option value="">Select team member</option>
+            <option th:each="resource : ${resources}"
+                    th:value="${resource.resourceId}"
+                    th:text="${resource.name + ' - ' + resource.role}">
+            </option>
+          </select>
+          <span class="form-hint">Who worked on this task?</span>
+        </div>
 
-      <label>Date:</label>
-      <input type="date" th:field="*{date}" required/><br/>
+        <div class="form-input-group">
+          <div class="form-group">
+            <label class="form-label" for="date">Work Date</label>
+            <input type="date" id="date" class="form-input" th:field="*{date}" required/>
+            <span class="form-hint">When was the work performed?</span>
+          </div>
 
-      <label>Hours:</label>
-      <input type="number" th:field="*{hours}" step="0.25" min="0" max="24" required/><br/>
+          <div class="form-group">
+            <label class="form-label" for="hours">Hours Worked</label>
+            <input type="number" id="hours" class="form-input" th:field="*{hours}"
+                   step="0.25" min="0" max="24" placeholder="0.00" required/>
+            <span class="form-hint">Time spent (in 15-minute increments)</span>
+          </div>
+        </div>
 
-      <button type="submit" class="btn btn-success">Register Time</button>
-    </form>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">Register Time</button>
+          <a th:href="@{/tasks/{id}(id=${timeRegistration.taskId})}" class="btn btn-outline">Cancel</a>
+        </div>
+      </form>
 
-    <!-- EDIT FORM -->
-    <form th:if="${timeRegistration.timeId != 0}"
-          th:action="@{/timeregistrations/{id}/update(id=${timeRegistration.timeId})}"
-          th:object="${timeRegistration}" method="post">
+      <!-- EDIT FORM -->
+      <form th:if="${timeRegistration.timeId != 0}"
+            th:action="@{/timeregistrations/{id}/update(id=${timeRegistration.timeId})}"
+            th:object="${timeRegistration}" method="post">
 
-      <label>Resource:</label>
-      <select th:field="*{resourceId}" required>
-        <option value="">Select Resource</option>
-        <option th:each="resource : ${resources}"
-                th:value="${resource.resourceId}"
-                th:text="${resource.name}">
-        </option>
-      </select><br/>
+        <div class="form-group">
+          <label class="form-label" for="resourceId">Team Member</label>
+          <select id="resourceId" class="form-select" th:field="*{resourceId}" required>
+            <option value="">Select team member</option>
+            <option th:each="resource : ${resources}"
+                    th:value="${resource.resourceId}"
+                    th:text="${resource.name + ' - ' + resource.role}">
+            </option>
+          </select>
+          <span class="form-hint">Who worked on this task?</span>
+        </div>
 
-      <label>Date:</label>
-      <input type="date" th:field="*{date}" required/><br/>
+        <div class="form-input-group">
+          <div class="form-group">
+            <label class="form-label" for="date">Work Date</label>
+            <input type="date" id="date" class="form-input" th:field="*{date}" required/>
+            <span class="form-hint">When was the work performed?</span>
+          </div>
 
-      <label>Hours:</label>
-      <input type="number" th:field="*{hours}" step="0.25" min="0" max="24" required/><br/>
+          <div class="form-group">
+            <label class="form-label" for="hours">Hours Worked</label>
+            <input type="number" id="hours" class="form-input" th:field="*{hours}"
+                   step="0.25" min="0" max="24" placeholder="0.00" required/>
+            <span class="form-hint">Time spent (in 15-minute increments)</span>
+          </div>
+        </div>
 
-      <button type="submit" class="btn btn-success">Update</button>
-    </form>
-
-    <a th:href="@{/tasks/{id}/timeregistrations(id=${timeRegistration.taskId})}" class="btn">Back to Time Registrations</a>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">Update Registration</button>
+          <a th:href="@{/tasks/{id}(id=${timeRegistration.taskId})}" class="btn btn-outline">Cancel</a>
+        </div>
+      </form>
+    </div>
   </div>
 </main>
 </body>

@@ -9,63 +9,114 @@
 
 <main>
     <div class="container">
-        <h1 th:text="${task.taskId == 0} ? 'Create New Task' : 'Edit Task'"></h1>
+        <div class="form-container">
+            <div class="form-header">
+                <h1 class="form-title" th:text="${task.taskId == 0} ? 'Create New Task' : 'Edit Task'"></h1>
+                <p class="form-subtitle" th:text="${task.taskId == 0} ? 'Define actionable work items for your subproject' : 'Update task details and status'"></p>
+            </div>
 
-        <!-- CREATE FORM -->
-        <form th:if="${task.taskId == 0}"
-              th:action="@{/subprojects/{sid}/tasks(sid=${task.subprojectId})}"
-              th:object="${task}" method="post">
+            <!-- CREATE FORM -->
+            <form th:if="${task.taskId == 0}"
+                  th:action="@{/subprojects/{sid}/tasks(sid=${task.subprojectId})}"
+                  th:object="${task}" method="post">
 
-            <label>Name:</label>
-            <input type="text" th:field="*{name}" required/><br/>
+                <div class="form-group">
+                    <label class="form-label" for="name">Task Name</label>
+                    <input type="text" id="name" class="form-input" th:field="*{name}"
+                           placeholder="Enter task name" required/>
+                    <span class="form-hint">Be specific about what needs to be done</span>
+                </div>
 
-            <label>Description:</label>
-            <textarea th:field="*{description}"></textarea><br/>
+                <div class="form-group">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea id="description" class="form-textarea" th:field="*{description}"
+                              placeholder="Provide detailed requirements and acceptance criteria"></textarea>
+                    <span class="form-hint">Include any relevant details, dependencies, or requirements</span>
+                </div>
 
-            <label>Estimated Hours:</label>
-            <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
+                <div class="form-input-group">
+                    <div class="form-group">
+                        <label class="form-label" for="estimatedHours">Estimated Hours</label>
+                        <input type="number" id="estimatedHours" class="form-input"
+                               th:field="*{estimatedHours}" step="0.5" min="0"
+                               placeholder="0.0"/>
+                        <span class="form-hint">Best guess for completion time</span>
+                    </div>
 
-            <label>Deadline:</label>
-            <input type="date" th:field="*{deadline}"/><br/>
+                    <div class="form-group">
+                        <label class="form-label" for="deadline">Deadline</label>
+                        <input type="date" id="deadline" class="form-input" th:field="*{deadline}"/>
+                        <span class="form-hint">When should this be completed?</span>
+                    </div>
+                </div>
 
-            <label>Status:</label>
-            <select th:field="*{status}">
-                <option value="TO_DO">To Do</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="DONE">Done</option>
-            </select><br/>
+                <div class="form-group">
+                    <label class="form-label" for="status">Status</label>
+                    <select id="status" class="form-select" th:field="*{status}">
+                        <option value="TO_DO">To Do</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="DONE">Done</option>
+                    </select>
+                    <span class="form-hint">Current state of the task</span>
+                </div>
 
-            <button type="submit" class="btn btn-success">Save</button>
-        </form>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Create Task</button>
+                    <a th:href="@{/subprojects/{id}(id=${task.subprojectId})}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
 
-        <!-- EDIT FORM -->
-        <form th:if="${task.taskId != 0}"
-              th:action="@{/tasks/{id}/update(id=${task.taskId})}"
-              th:object="${task}" method="post">
+            <!-- EDIT FORM -->
+            <form th:if="${task.taskId != 0}"
+                  th:action="@{/tasks/{id}/update(id=${task.taskId})}"
+                  th:object="${task}" method="post">
 
-            <label>Name:</label>
-            <input type="text" th:field="*{name}" required/><br/>
+                <div class="form-group">
+                    <label class="form-label" for="name">Task Name</label>
+                    <input type="text" id="name" class="form-input" th:field="*{name}"
+                           placeholder="Enter task name" required/>
+                    <span class="form-hint">Be specific about what needs to be done</span>
+                </div>
 
-            <label>Description:</label>
-            <textarea th:field="*{description}"></textarea><br/>
+                <div class="form-group">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea id="description" class="form-textarea" th:field="*{description}"
+                              placeholder="Provide detailed requirements and acceptance criteria"></textarea>
+                    <span class="form-hint">Include any relevant details, dependencies, or requirements</span>
+                </div>
 
-            <label>Estimated Hours:</label>
-            <input type="number" th:field="*{estimatedHours}" step="0.5"/><br/>
+                <div class="form-input-group">
+                    <div class="form-group">
+                        <label class="form-label" for="estimatedHours">Estimated Hours</label>
+                        <input type="number" id="estimatedHours" class="form-input"
+                               th:field="*{estimatedHours}" step="0.5" min="0"
+                               placeholder="0.0"/>
+                        <span class="form-hint">Best guess for completion time</span>
+                    </div>
 
-            <label>Deadline:</label>
-            <input type="date" th:field="*{deadline}"/><br/>
+                    <div class="form-group">
+                        <label class="form-label" for="deadline">Deadline</label>
+                        <input type="date" id="deadline" class="form-input" th:field="*{deadline}"/>
+                        <span class="form-hint">When should this be completed?</span>
+                    </div>
+                </div>
 
-            <label>Status:</label>
-            <select th:field="*{status}">
-                <option value="TO_DO">To Do</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="DONE">Done</option>
-            </select><br/>
+                <div class="form-group">
+                    <label class="form-label" for="status">Status</label>
+                    <select id="status" class="form-select" th:field="*{status}">
+                        <option value="TO_DO">To Do</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="DONE">Done</option>
+                    </select>
+                    <span class="form-hint">Current state of the task</span>
+                </div>
 
-            <button type="submit" class="btn btn-success">Save</button>
-        </form>
-
-        <a th:href="@{/subprojects/{id}/tasks(id=${task.subprojectId})}" class="btn">Back to Task List</a>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Update Task</button>
+                    <a th:href="@{/subprojects/{id}(id=${task.subprojectId})}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </main>
 </body>

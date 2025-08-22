@@ -9,33 +9,62 @@
 
 <main>
     <div class="container">
-        <h1 th:text="${resource.resourceId == 0} ? 'Create New Resource' : 'Edit Resource'"></h1>
+        <div class="form-container">
+            <div class="form-header">
+                <h1 class="form-title" th:text="${resource.resourceId == 0} ? 'Create New Resource' : 'Edit Resource'"></h1>
+                <p class="form-subtitle" th:text="${resource.resourceId == 0} ? 'Add team members to your project system' : 'Update resource information'"></p>
+            </div>
 
-        <form th:action="${resource.resourceId == 0} ? @{/resources} : @{/resources/{id}/update(id=${resource.resourceId})}"
-              th:object="${resource}" method="post">
+            <form th:action="${resource.resourceId == 0} ? @{/resources} : @{/resources/{id}/update(id=${resource.resourceId})}"
+                  th:object="${resource}" method="post">
 
-            <label>Name:</label>
-            <input type="text" th:field="*{name}" required/><br/>
+                <div class="form-group">
+                    <label class="form-label" for="name">Full Name</label>
+                    <input type="text" id="name" class="form-input" th:field="*{name}"
+                           placeholder="Enter full name" required/>
+                    <span class="form-hint">Team member's complete name</span>
+                </div>
 
-            <label>Role:</label>
-            <input type="text" th:field="*{role}"/><br/>
+                <div class="form-group">
+                    <label class="form-label" for="role">Job Role</label>
+                    <input type="text" id="role" class="form-input" th:field="*{role}"
+                           placeholder="e.g., Developer, Designer, Project Manager"/>
+                    <span class="form-hint">Professional title or position</span>
+                </div>
 
-            <label>System Role:</label>
-            <select th:field="*{systemRole}">
-                <option value="USER">USER</option>
-                <option value="ADMIN">ADMIN</option>
-            </select><br/>
+                <div class="form-input-group">
+                    <div class="form-group">
+                        <label class="form-label" for="username">Username</label>
+                        <input type="text" id="username" class="form-input" th:field="*{username}"
+                               placeholder="Enter username" required/>
+                        <span class="form-hint">Login identifier</span>
+                    </div>
 
-            <label>Username:</label>
-            <input type="text" th:field="*{username}" required/><br/>
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" class="form-input" th:field="*{password}"
+                               placeholder="Enter password" required/>
+                        <span class="form-hint">Secure access credential</span>
+                    </div>
+                </div>
 
-            <label>Password:</label>
-            <input type="password" th:field="*{password}" required/><br/>
+                <div class="form-group">
+                    <label class="form-label" for="systemRole">System Role</label>
+                    <select id="systemRole" class="form-select" th:field="*{systemRole}">
+                        <option value="USER">User - Standard Access</option>
+                        <option value="ADMIN">Admin - Full Access</option>
+                    </select>
+                    <span class="form-hint">Determines system permissions and access level</span>
+                </div>
 
-            <button type="submit" class="btn btn-success">Save</button>
-        </form>
-
-        <a href="/resources" class="btn">Back to Resource List</a>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">
+                        <span th:text="${resource.resourceId == 0} ? 'Create Resource' : 'Update Resource'"></span>
+                    </button>
+                    <a href="/resources" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </main>
 </body>

@@ -9,27 +9,49 @@
 
 <main>
   <div class="container">
-    <h1 th:text="${subproject.subprojectId == 0} ? 'Create New Subproject' : 'Edit Subproject'"></h1>
+    <div class="form-container">
+      <div class="form-header">
+        <h1 class="form-title" th:text="${subproject.subprojectId == 0} ? 'Create New Subproject' : 'Edit Subproject'"></h1>
+        <p class="form-subtitle" th:text="${subproject.subprojectId == 0} ? 'Break down your project into manageable components' : 'Update subproject details'"></p>
+      </div>
 
-    <form th:action="${subproject.subprojectId == 0} ? @{/projects/{pid}/subprojects(pid=${subproject.projectId})} : @{/subprojects/{id}/update(id=${subproject.subprojectId})}"
-          th:object="${subproject}" method="post">
+      <form th:action="${subproject.subprojectId == 0} ? @{/projects/{pid}/subprojects(pid=${subproject.projectId})} : @{/subprojects/{id}/update(id=${subproject.subprojectId})}"
+            th:object="${subproject}" method="post">
 
-      <label>Name:</label>
-      <input type="text" th:field="*{name}" required/><br/>
+        <div class="form-group">
+          <label class="form-label" for="name">Subproject Name</label>
+          <input type="text" id="name" class="form-input" th:field="*{name}"
+                 placeholder="Enter subproject name" required/>
+          <span class="form-hint">Name this phase or component of your project</span>
+        </div>
 
-      <label>Description:</label>
-      <textarea th:field="*{description}"></textarea><br/>
+        <div class="form-group">
+          <label class="form-label" for="description">Description</label>
+          <textarea id="description" class="form-textarea" th:field="*{description}"
+                    placeholder="Describe the subproject objectives and deliverables"></textarea>
+          <span class="form-hint">Explain what this subproject will accomplish</span>
+        </div>
 
-      <label>Start Date:</label>
-      <input type="date" th:field="*{startDate}"/><br/>
+        <div class="form-input-group">
+          <div class="form-group">
+            <label class="form-label" for="startDate">Start Date</label>
+            <input type="date" id="startDate" class="form-input" th:field="*{startDate}"/>
+          </div>
 
-      <label>End Date:</label>
-      <input type="date" th:field="*{endDate}"/><br/>
+          <div class="form-group">
+            <label class="form-label" for="endDate">End Date</label>
+            <input type="date" id="endDate" class="form-input" th:field="*{endDate}"/>
+          </div>
+        </div>
 
-      <button type="submit" class="btn btn-success">Save</button>
-    </form>
-
-    <a th:href="@{/projects/{id}/subprojects(id=${subproject.projectId})}" class="btn">Back to Subproject List</a>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">
+            <span th:text="${subproject.subprojectId == 0} ? 'Create Subproject' : 'Update Subproject'"></span>
+          </button>
+          <a th:href="@{/projects/{id}(id=${subproject.projectId})}" class="btn btn-outline">Cancel</a>
+        </div>
+      </form>
+    </div>
   </div>
 </main>
 </body>

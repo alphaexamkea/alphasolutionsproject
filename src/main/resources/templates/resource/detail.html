@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Resource Detail</title>
+  <title th:text="${resource.name} + ' - Resource Details'">Resource Detail</title>
   <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -9,16 +9,48 @@
 
 <main>
   <div class="container">
-    <h1 th:text="${resource.name}"></h1>
-    <p><strong>Role:</strong> <span th:text="${resource.role}"></span></p>
-    <p><strong>System Role:</strong> <span th:text="${resource.systemRole}"></span></p>
-    <p><strong>Username:</strong> <span th:text="${resource.username}"></span></p>
+    <div class="detail-header">
+      <div class="breadcrumb">
+        <a href="/resources">Resources</a> / <span th:text="${resource.name}"></span>
+      </div>
+      <div class="header-actions">
+        <a th:href="@{/resources/{id}/edit(id=${resource.resourceId})}" class="link-action">Edit</a>
+        <a th:href="@{/resources/{id}/delete(id=${resource.resourceId})}"
+           class="link-action link-danger"
+           onclick="return confirm('Are you sure you want to delete this resource?')">Delete</a>
+      </div>
+    </div>
 
-    <a th:href="@{/resources/{id}/edit(id=${resource.resourceId})}" class="btn">Edit</a>
-    <a th:href="@{/resources/{id}/delete(id=${resource.resourceId})}"
-       class="btn btn-danger"
-       onclick="return confirm('Are you sure?')">Delete</a>
-    <a href="/resources" class="btn">Back to Resource List</a>
+    <div class="resource-overview">
+      <h1 class="detail-title" th:text="${resource.name}"></h1>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Role</span>
+          <span class="info-value" th:text="${resource.role}"></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">System Role</span>
+          <span class="info-value">
+                        <span class="status-badge"
+                              th:classappend="${resource.systemRole == 'ADMIN' ? 'status-warning' : 'status-info'}"
+                              th:text="${resource.systemRole}"></span>
+                    </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Username</span>
+          <span class="info-value" th:text="${resource.username}"></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Resource ID</span>
+          <span class="info-value" th:text="${resource.resourceId}"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="back-navigation">
+      <a href="/resources" class="link-subtle">← Back to Resources</a>
+    </div>
   </div>
 </main>
 </body>

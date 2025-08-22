@@ -9,37 +9,63 @@
 
 <main>
   <div class="container">
-    <h1>All Resources</h1>
+    <div class="resources-header">
+      <div class="resources-title-section">
+        <h1>Resources</h1>
+        <p class="resources-subtitle">Manage team members and their system access.</p>
+      </div>
+      <a href="/resources/new" class="btn btn-primary">+ New Resource</a>
+    </div>
 
-    <table>
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Role</th>
-        <th>System Role</th>
-        <th>Username</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="res : ${resources}">
-        <td th:text="${res.resourceId}"></td>
-        <td><a th:href="@{/resources/{id}(id=${res.resourceId})}" th:text="${res.name}"></a></td>
-        <td th:text="${res.role}"></td>
-        <td th:text="${res.systemRole}"></td>
-        <td th:text="${res.username}"></td>
-        <td>
-          <a th:href="@{/resources/{id}/edit(id=${res.resourceId})}" class="btn">Edit</a>
+    <div class="resources-list" th:if="${!resources.isEmpty()}">
+      <div class="resource-card" th:each="res : ${resources}">
+        <div class="resource-card-content">
+          <div class="resource-header">
+            <h3 class="resource-title">
+              <a th:href="@{/resources/{id}(id=${res.resourceId})}" th:text="${res.name}"></a>
+            </h3>
+            <div class="resource-system-role">
+                            <span class="status-badge"
+                                  th:classappend="${res.systemRole == 'ADMIN' ? 'status-warning' : 'status-info'}"
+                                  th:text="${res.systemRole}"></span>
+            </div>
+          </div>
+
+          <div class="resource-details">
+            <div class="resource-info">
+              <div class="resource-meta">
+                <div class="meta-item">
+                  <span class="meta-label">Role</span>
+                  <span class="meta-value" th:text="${res.role}"></span>
+                </div>
+                <span class="meta-separator">•</span>
+                <div class="meta-item">
+                  <span class="meta-label">Username</span>
+                  <span class="meta-value" th:text="${res.username}"></span>
+                </div>
+                <span class="meta-separator">•</span>
+                <div class="meta-item">
+                  <span class="meta-label">ID</span>
+                  <span class="meta-value" th:text="${res.resourceId}"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-actions">
+          <a th:href="@{/resources/{id}/edit(id=${res.resourceId})}" class="link-subtle">Edit</a>
           <a th:href="@{/resources/{id}/delete(id=${res.resourceId})}"
-             class="btn btn-danger"
-             onclick="return confirm('Are you sure?')">Delete</a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+             class="link-subtle link-danger"
+             onclick="return confirm('Are you sure you want to delete this resource?')">Delete</a>
+        </div>
+      </div>
+    </div>
 
-    <a href="/resources/new" class="btn btn-success">Create New Resource</a>
+    <div class="empty-message" th:if="${resources.isEmpty()}">
+      <p>No resources found.</p>
+      <a href="/resources/new" class="link-action">Add your first resource</a>
+    </div>
   </div>
 </main>
 </body>

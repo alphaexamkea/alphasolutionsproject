@@ -27,15 +27,6 @@ public class SubprojectController {
     }
 
 
-    // List subprojects for a project
-    @GetMapping("/projects/{projectId}/subprojects")
-    public String listSubprojects(@PathVariable int projectId, Model model) {
-        List<Subproject> subprojects = subprojectService.getSubprojectsByProjectId(projectId);
-        model.addAttribute("subprojects", subprojects);
-        model.addAttribute("projectId", projectId);
-        return "subproject/list";
-    }
-
     // Show form to create new subproject
     @GetMapping("/projects/{projectId}/subprojects/new")
     public String showCreateForm(@PathVariable int projectId, Model model) {
@@ -50,7 +41,7 @@ public class SubprojectController {
     public String saveSubproject(@PathVariable int projectId, @ModelAttribute Subproject subproject) {
         subproject.setProjectId(projectId);
         subprojectService.addSubproject(subproject);
-        return "redirect:/projects/" + projectId + "/subprojects";
+        return "redirect:/projects/" + projectId;
     }
 
     // Show subproject detail
@@ -89,7 +80,7 @@ public class SubprojectController {
     public String updateSubproject(@PathVariable int id, @ModelAttribute Subproject subproject) {
         subproject.setSubprojectId(id);
         subprojectService.updateSubproject(subproject);
-        return "redirect:/projects/" + subproject.getProjectId() + "/subprojects";
+        return "redirect:/projects/" + subproject.getProjectId();
     }
 
     // Delete subproject
@@ -98,7 +89,7 @@ public class SubprojectController {
         Subproject subproject = subprojectService.getSubprojectById(id);
         if (subproject != null) {
             subprojectService.deleteSubproject(id);
-            return "redirect:/projects/" + subproject.getProjectId() + "/subprojects";
+            return "redirect:/projects/" + subproject.getProjectId();
         }
         return "shared/error";
     }
