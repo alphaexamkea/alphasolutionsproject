@@ -56,7 +56,10 @@ public class SubprojectController {
 
     // Show subproject detail
     @GetMapping("/subprojects/{id}")
-    public String showSubprojectDetail(@PathVariable int id, Model model) {
+    public String showSubprojectDetail(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Subproject subproject = subprojectService.getSubprojectById(id);
         if (subproject == null) {
             return "shared/error";

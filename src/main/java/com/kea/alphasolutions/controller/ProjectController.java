@@ -35,7 +35,10 @@ public class ProjectController {
 
     // Show all projects
     @GetMapping("/projects")
-    public String listProjects(Model model) {
+    public String listProjects(HttpSession session, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         List<Project> projects = projectService.getAllProjects();
         Map<Integer, Integer> subprojectsCounts = new HashMap<>();
         Map<Integer, Integer> tasksCounts = new HashMap<>();
@@ -79,7 +82,10 @@ public class ProjectController {
     }
 
     @GetMapping("/projects/{id}")
-    public String showProjectDetail(@PathVariable int id, Model model) {
+    public String showProjectDetail(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Project project = projectService.getProjectById(id);
         if (project == null) {
             return "shared/error";

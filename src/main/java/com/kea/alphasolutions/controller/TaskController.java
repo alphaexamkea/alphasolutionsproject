@@ -55,7 +55,10 @@ public class TaskController {
 
     // Show task detail
     @GetMapping("/tasks/{id}")
-    public String showTaskDetail(@PathVariable int id, Model model) {
+    public String showTaskDetail(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Task task = taskService.getTaskById(id);
         if (task == null) {
             return "shared/error";

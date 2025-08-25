@@ -28,7 +28,10 @@ public class ResourceController {
 
     // List all resources
     @GetMapping("/resources")
-    public String listResources(Model model) {
+    public String listResources(HttpSession session, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         List<Resource> resources = resourceService.getAllResources();
         model.addAttribute("resources", resources);
         return "resource/list";
@@ -56,7 +59,10 @@ public class ResourceController {
 
     // Show resource detail
     @GetMapping("/resources/{id}")
-    public String showResourceDetail(@PathVariable int id, Model model) {
+    public String showResourceDetail(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Resource resource = resourceService.getResourceById(id);
         if (resource == null) {
             return "shared/error";
