@@ -3,6 +3,8 @@ package com.kea.alphasolutions.controller;
 import com.kea.alphasolutions.model.Resource;
 import com.kea.alphasolutions.service.ResourceService;
 import com.kea.alphasolutions.service.TimeRegistrationService;
+import com.kea.alphasolutions.util.AuthenticationUtil;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,10 @@ public class TimeTrackerController {
     }
 
     @GetMapping("/time-tracker")
-    public String showTimeTrackerOverview(Model model) {
+    public String showTimeTrackerOverview(HttpSession session, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         List<Resource> resources = resourceService.getAllResources();
         model.addAttribute("resources", resources);
         model.addAttribute("timeRegistrationService", timeRegistrationService);

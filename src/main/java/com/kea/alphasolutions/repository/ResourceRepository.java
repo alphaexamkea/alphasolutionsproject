@@ -52,4 +52,10 @@ public class ResourceRepository {
         String sql = "DELETE FROM Resource WHERE resource_id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+    public Resource findByUsername(String username) {
+        String sql = "SELECT * FROM Resource WHERE username = ?";
+        List<Resource> results = jdbcTemplate.query(sql, new ResourceRowMapper(), username);
+        return results.isEmpty() ? null : results.get(0);
+    }
 }

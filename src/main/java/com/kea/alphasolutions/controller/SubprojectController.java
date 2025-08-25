@@ -6,6 +6,8 @@ import com.kea.alphasolutions.service.SubprojectService;
 import com.kea.alphasolutions.service.TimeRegistrationService;
 import com.kea.alphasolutions.service.TaskService;
 import com.kea.alphasolutions.model.Task;
+import com.kea.alphasolutions.util.AuthenticationUtil;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,10 @@ public class SubprojectController {
 
     // Show form to create new subproject
     @GetMapping("/projects/{projectId}/subprojects/new")
-    public String showCreateForm(@PathVariable int projectId, Model model) {
+    public String showCreateForm(HttpSession session, @PathVariable int projectId, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Subproject subproject = new Subproject();
         subproject.setProjectId(projectId);
         model.addAttribute("subproject", subproject);
@@ -40,7 +45,10 @@ public class SubprojectController {
 
     // Handle form submission (create)
     @PostMapping("/projects/{projectId}/subprojects")
-    public String saveSubproject(@PathVariable int projectId, @ModelAttribute Subproject subproject) {
+    public String saveSubproject(HttpSession session, @PathVariable int projectId, @ModelAttribute Subproject subproject) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         subproject.setProjectId(projectId);
         subprojectService.addSubproject(subproject);
         return "redirect:/projects/" + projectId;
@@ -48,7 +56,10 @@ public class SubprojectController {
 
     // Show subproject detail
     @GetMapping("/subprojects/{id}")
-    public String showSubprojectDetail(@PathVariable int id, Model model) {
+    public String showSubprojectDetail(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Subproject subproject = subprojectService.getSubprojectById(id);
         if (subproject == null) {
             return "shared/error";
@@ -75,7 +86,10 @@ public class SubprojectController {
 
     // Show edit form
     @GetMapping("/subprojects/{id}/edit")
-    public String showEditForm(@PathVariable int id, Model model) {
+    public String showEditForm(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Subproject subproject = subprojectService.getSubprojectById(id);
         if (subproject == null) {
             return "shared/error";
@@ -86,7 +100,10 @@ public class SubprojectController {
 
     // Handle edit form submission
     @PostMapping("/subprojects/{id}/update")
-    public String updateSubproject(@PathVariable int id, @ModelAttribute Subproject subproject) {
+    public String updateSubproject(HttpSession session, @PathVariable int id, @ModelAttribute Subproject subproject) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         subproject.setSubprojectId(id);
         subprojectService.updateSubproject(subproject);
         return "redirect:/projects/" + subproject.getProjectId();
@@ -94,7 +111,10 @@ public class SubprojectController {
 
     // Delete subproject
     @GetMapping("/subprojects/{id}/delete")
-    public String deleteSubproject(@PathVariable int id) {
+    public String deleteSubproject(HttpSession session, @PathVariable int id) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Subproject subproject = subprojectService.getSubprojectById(id);
         if (subproject != null) {
             subprojectService.deleteSubproject(id);

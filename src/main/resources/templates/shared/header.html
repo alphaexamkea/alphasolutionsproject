@@ -16,6 +16,10 @@
         <a href="/projects">📁 Projects</a>
         <a href="/time-tracker">⏱️ Time Tracker</a>
         <a href="/resources">👥 Resources</a>
+        <span th:if="${session.loggedInUser != null}">
+        <a href="/logout">Logout</a>
+        </span>
+        <a th:if="${session.loggedInUser == null}" href="/login">Login</a>
       </nav>
     </div>
   </div>
