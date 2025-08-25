@@ -32,6 +32,7 @@ public class TimeRegistrationControllerTest {
 
     @Test
     void unauthenticatedUserRedirectedToLogin() throws Exception {
+        // Tester at uautoriserede brugere omdirigeres til login
         mockMvc.perform(post("/tasks/1/timeregistrations"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
@@ -39,9 +40,12 @@ public class TimeRegistrationControllerTest {
 
     @Test
     void authenticatedUserCanCreateTimeRegistration() throws Exception {
-        // Arrange
+        // Arrange - Autentificeret bruger registrerer arbejdstid
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("loggedInUser", "testuser");
+        Resource user = new Resource();
+        user.setResourceId(1);
+        user.setName("Test User");
+        session.setAttribute("loggedInUser", user);
 
         Resource testResource = new Resource();
         testResource.setResourceId(1);
@@ -49,7 +53,7 @@ public class TimeRegistrationControllerTest {
 
         when(resourceService.getAllResources()).thenReturn(List.of(testResource));
 
-        // Act & Assert
+        // Act & Assert - Opretter tidsregistrering og omdirigerer
         mockMvc.perform(post("/tasks/1/timeregistrations")
                 .session(session)
                 .param("resourceId", "1")
@@ -58,14 +62,18 @@ public class TimeRegistrationControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tasks/1"));
 
+        // Verificerer at tidsregistrering blev tilføjet
         verify(timeRegistrationService, times(1)).addTimeRegistration(any(TimeRegistration.class));
     }
 
     @Test
     void authenticatedUserCanUpdateTimeRegistration() throws Exception {
-        // Arrange
+        // Arrange - Opdatering af eksisterende tidsregistrering
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("loggedInUser", "testuser");
+        Resource user = new Resource();
+        user.setResourceId(1);
+        user.setName("Test User");
+        session.setAttribute("loggedInUser", user);
 
         TimeRegistration existingTimeReg = new TimeRegistration();
         existingTimeReg.setTimeId(1);
@@ -75,10 +83,11 @@ public class TimeRegistrationControllerTest {
         testResource.setResourceId(1);
         testResource.setName("Test Resource");
 
+        // Mocker eksisterende data
         when(timeRegistrationService.getTimeRegistrationById(1)).thenReturn(existingTimeReg);
         when(resourceService.getAllResources()).thenReturn(List.of(testResource));
 
-        // Act & Assert
+        // Act & Assert - Opdaterer tidsregistrering (fra 4.0 til 6.0 timer)
         mockMvc.perform(post("/timeregistrations/1/update")
                 .session(session)
                 .param("timeId", "1")
@@ -89,6 +98,7 @@ public class TimeRegistrationControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tasks/1"));
 
+        // Verificerer at opdatering blev udført
         verify(timeRegistrationService, times(1)).updateTimeRegistration(any(TimeRegistration.class));
     }
 }

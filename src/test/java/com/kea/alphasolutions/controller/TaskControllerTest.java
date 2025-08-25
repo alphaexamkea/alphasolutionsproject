@@ -1,11 +1,7 @@
 package com.kea.alphasolutions.controller;
 
-import com.kea.alphasolutions.model.Task;
-import com.kea.alphasolutions.model.TimeRegistration;
-import com.kea.alphasolutions.model.Resource;
-import com.kea.alphasolutions.service.TaskService;
-import com.kea.alphasolutions.service.TimeRegistrationService;
-import com.kea.alphasolutions.service.ResourceService;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,13 +9,17 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import com.kea.alphasolutions.model.Resource;
+import com.kea.alphasolutions.model.Task;
+import com.kea.alphasolutions.model.TimeRegistration;
+import com.kea.alphasolutions.service.ResourceService;
+import com.kea.alphasolutions.service.TaskService;
+import com.kea.alphasolutions.service.TimeRegistrationService;
 
 @WebMvcTest(TaskController.class)
 public class TaskControllerTest {
@@ -45,9 +45,12 @@ public class TaskControllerTest {
 
     @Test
     void authenticatedUserCanViewTaskDetail() throws Exception {
-        // Arrange
+        // Arrange - Opsætter opgavedetalje visning med tidsregistreringer
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("loggedInUser", "testuser");
+        Resource user = new Resource();
+        user.setResourceId(1);
+        user.setName("Test User");
+        session.setAttribute("loggedInUser", user);
 
         Task testTask = new Task();
         testTask.setTaskId(1);
@@ -61,12 +64,13 @@ public class TaskControllerTest {
         testResource.setResourceId(1);
         testResource.setName("Test Resource");
 
+        // Mocker service data for opgave og tidsregistreringer
         when(taskService.getTaskById(1)).thenReturn(testTask);
         when(timeRegistrationService.getTimeRegistrationsByTaskId(1)).thenReturn(List.of(timeReg));
         when(timeRegistrationService.getTotalHoursByTaskId(1)).thenReturn(4.0);
         when(resourceService.getResourceById(1)).thenReturn(testResource);
 
-        // Act & Assert
+        // Act & Assert - Verificerer opgavedetalje siden
         mockMvc.perform(get("/tasks/1").session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("task/detail"))
@@ -80,11 +84,14 @@ public class TaskControllerTest {
 
     @Test
     void authenticatedUserCanCreateTask() throws Exception {
-        // Arrange
+        // Arrange - Autentificeret bruger opretter ny opgave
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("loggedInUser", "testuser");
+        Resource user = new Resource();
+        user.setResourceId(1);
+        user.setName("Test User");
+        session.setAttribute("loggedInUser", user);
 
-        // Act & Assert
+        // Act & Assert - Opretter opgave og verificerer omdirigering
         mockMvc.perform(post("/subprojects/1/tasks")
                 .session(session)
                 .param("name", "New Task")
@@ -94,21 +101,25 @@ public class TaskControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/subprojects/1"));
 
+        // Verificerer at opgave blev tilføjet
         verify(taskService, times(1)).addTask(any(Task.class));
     }
 
     @Test
     void authenticatedUserCanUpdateTask() throws Exception {
-        // Arrange
+        // Arrange - Opdatering af eksisterende opgave
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("loggedInUser", "testuser");
+        Resource user = new Resource();
+        user.setResourceId(1);
+        user.setName("Test User");
+        session.setAttribute("loggedInUser", user);
 
         Task existingTask = new Task();
         existingTask.setTaskId(1);
         existingTask.setSubprojectId(1);
         when(taskService.getTaskById(1)).thenReturn(existingTask);
 
-        // Act & Assert
+        // Act & Assert - Opdaterer opgave og verificerer omdirigering
         mockMvc.perform(post("/tasks/1/update")
                 .session(session)
                 .param("taskId", "1")
@@ -121,6 +132,7 @@ public class TaskControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/subprojects/1"));
 
+        // Verificerer at opgave blev opdateret
         verify(taskService, times(1)).updateTask(any(Task.class));
     }
 }
