@@ -5,6 +5,8 @@ import com.kea.alphasolutions.model.TimeRegistration;
 import com.kea.alphasolutions.service.ResourceService;
 import com.kea.alphasolutions.service.TimeRegistrationService;
 import com.kea.alphasolutions.service.TaskService;
+import com.kea.alphasolutions.util.AuthenticationUtil;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +36,20 @@ public class ResourceController {
 
     // Show form to create new resource
     @GetMapping("/resources/new")
-    public String showCreateForm(Model model) {
+    public String showCreateForm(HttpSession session, Model model) {
+        if (!AuthenticationUtil.isAdmin(session)) {
+            return "redirect:/login";
+        }
         model.addAttribute("resource", new Resource());
         return "resource/form";
     }
 
     // Handle form submission (create)
     @PostMapping("/resources")
-    public String saveResource(@ModelAttribute Resource resource) {
+    public String saveResource(HttpSession session, @ModelAttribute Resource resource) {
+        if (!AuthenticationUtil.isAdmin(session)) {
+            return "redirect:/login";
+        }
         resourceService.addResource(resource);
         return "redirect:/resources";
     }
@@ -66,7 +74,10 @@ public class ResourceController {
 
     // Show edit form
     @GetMapping("/resources/{id}/edit")
-    public String showEditForm(@PathVariable int id, Model model) {
+    public String showEditForm(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAdmin(session)) {
+            return "redirect:/login";
+        }
         Resource resource = resourceService.getResourceById(id);
         if (resource == null) {
             return "shared/error";
@@ -77,7 +88,10 @@ public class ResourceController {
 
     // Handle edit form submission
     @PostMapping("/resources/{id}/update")
-    public String updateResource(@PathVariable int id, @ModelAttribute Resource resource) {
+    public String updateResource(HttpSession session, @PathVariable int id, @ModelAttribute Resource resource) {
+        if (!AuthenticationUtil.isAdmin(session)) {
+            return "redirect:/login";
+        }
         resource.setResourceId(id);
         resourceService.updateResource(resource);
         return "redirect:/resources";
@@ -85,7 +99,10 @@ public class ResourceController {
 
     // Delete resource
     @GetMapping("/resources/{id}/delete")
-    public String deleteResource(@PathVariable int id) {
+    public String deleteResource(HttpSession session, @PathVariable int id) {
+        if (!AuthenticationUtil.isAdmin(session)) {
+            return "redirect:/login";
+        }
         resourceService.deleteResource(id);
         return "redirect:/resources";
     }

@@ -6,6 +6,8 @@ import com.kea.alphasolutions.model.TimeRegistration;
 import com.kea.alphasolutions.service.ResourceService;
 import com.kea.alphasolutions.service.TaskService;
 import com.kea.alphasolutions.service.TimeRegistrationService;
+import com.kea.alphasolutions.util.AuthenticationUtil;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,10 @@ public class TaskController {
 
     // Show form to create new task
     @GetMapping("/subprojects/{subprojectId}/tasks/new")
-    public String showCreateForm(@PathVariable int subprojectId, Model model) {
+    public String showCreateForm(HttpSession session, @PathVariable int subprojectId, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Task task = new Task();
         task.setSubprojectId(subprojectId);
         task.setStatus("TO_DO");
@@ -39,7 +44,10 @@ public class TaskController {
 
     // Handle form submission (create)
     @PostMapping("/subprojects/{subprojectId}/tasks")
-    public String saveTask(@PathVariable int subprojectId, @ModelAttribute Task task) {
+    public String saveTask(HttpSession session, @PathVariable int subprojectId, @ModelAttribute Task task) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         task.setSubprojectId(subprojectId);
         taskService.addTask(task);
         return "redirect:/subprojects/" + subprojectId;
@@ -76,7 +84,10 @@ public class TaskController {
 
     // Show edit form
     @GetMapping("/tasks/{id}/edit")
-    public String showEditForm(@PathVariable int id, Model model) {
+    public String showEditForm(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Task task = taskService.getTaskById(id);
         if (task == null) {
             return "shared/error";
@@ -87,7 +98,10 @@ public class TaskController {
 
     // Handle edit form submission
     @PostMapping("/tasks/{id}/update")
-    public String updateTask(@PathVariable int id, @ModelAttribute Task task) {
+    public String updateTask(HttpSession session, @PathVariable int id, @ModelAttribute Task task) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         task.setTaskId(id);
         taskService.updateTask(task);
         return "redirect:/subprojects/" + task.getSubprojectId();
@@ -95,7 +109,10 @@ public class TaskController {
 
     // Delete task
     @GetMapping("/tasks/{id}/delete")
-    public String deleteTask(@PathVariable int id) {
+    public String deleteTask(HttpSession session, @PathVariable int id) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Task task = taskService.getTaskById(id);
         if (task != null) {
             taskService.deleteTask(id);

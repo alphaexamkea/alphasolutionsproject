@@ -7,6 +7,8 @@ import com.kea.alphasolutions.service.ProjectService;
 import com.kea.alphasolutions.service.SubprojectService;
 import com.kea.alphasolutions.service.TimeRegistrationService;
 import com.kea.alphasolutions.service.TaskService;
+import com.kea.alphasolutions.util.AuthenticationUtil;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -58,14 +60,20 @@ public class ProjectController {
 
     // Show form to create new project
     @GetMapping("/projects/new")
-    public String showCreateForm(Model model) {
+    public String showCreateForm(HttpSession session, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         model.addAttribute("project", new Project());
         return "project/form";
     }
 
     // Handle form submission (create)
     @PostMapping("/projects")
-    public String saveProject(@ModelAttribute Project project) {
+    public String saveProject(HttpSession session, @ModelAttribute Project project) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         projectService.addProject(project);
         return "redirect:/projects";
     }
@@ -136,7 +144,10 @@ public class ProjectController {
 
     // Show edit form
     @GetMapping("/projects/{id}/edit")
-    public String showEditForm(@PathVariable int id, Model model) {
+    public String showEditForm(HttpSession session, @PathVariable int id, Model model) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         Project project = projectService.getProjectById(id);
         if (project == null) {
             return "shared/error";
@@ -147,7 +158,10 @@ public class ProjectController {
 
     // Handle edit form submission
     @PostMapping("/projects/{id}/update")
-    public String updateProject(@PathVariable int id, @ModelAttribute Project project) {
+    public String updateProject(HttpSession session, @PathVariable int id, @ModelAttribute Project project) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         project.setProjectId(id);
         projectService.updateProject(project);
         return "redirect:/projects";
@@ -155,7 +169,10 @@ public class ProjectController {
 
     // Delete project
     @GetMapping("/projects/{id}/delete")
-    public String deleteProject(@PathVariable int id) {
+    public String deleteProject(HttpSession session, @PathVariable int id) {
+        if (!AuthenticationUtil.isAuthenticated(session)) {
+            return "redirect:/login";
+        }
         projectService.deleteProject(id);
         return "redirect:/projects";
     }
