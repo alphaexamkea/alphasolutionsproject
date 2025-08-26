@@ -110,6 +110,15 @@ public class TaskController {
         Task existingTask = taskService.getTaskById(id);
         checkNotFound(existingTask, "Task not found with id: " + id);
         
+        // If status changes to DONE, require admin rights
+        if ("DONE".equals(task.getStatus()) && 
+            !"DONE".equals(existingTask.getStatus())) {
+            if (!AuthenticationUtil.isAdmin(session)) {
+                // Keep existing status if not admin
+                task.setStatus(existingTask.getStatus());
+            }
+        }
+        
         task.setTaskId(id);
         taskService.updateTask(task);
         return "redirect:/subprojects/" + task.getSubprojectId();

@@ -197,18 +197,42 @@ public class ProjectControllerTest {
 
     @Test
     void authenticatedUserCanDeleteProject() throws Exception {
-        // Arrange - Opsætter test for sletning af projekt
+        // Arrange - Opsætter test for sletning af projekt (regular user)
         MockHttpSession session = new MockHttpSession();
         Resource user = new Resource();
         user.setResourceId(1);
         user.setName("Test User");
+        user.setSystemRole("USER"); // Regular user should NOT be able to delete
         session.setAttribute("loggedInUser", user);
 
         Project existingProject = new Project();
         existingProject.setProjectId(1);
         when(projectService.getProjectById(1)).thenReturn(existingProject);
 
-        // Act & Assert - Sletter projekt og verificerer omdirigering
+        // Act & Assert - Regular user gets redirected to login (access denied)
+        mockMvc.perform(get("/projects/1/delete").session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+
+        // Verificerer at sletning IKKE blev udført
+        verify(projectService, never()).deleteProject(1);
+    }
+
+    @Test
+    void adminCanDeleteProject() throws Exception {
+        // Arrange - Opsætter test for admin sletning af projekt
+        MockHttpSession session = new MockHttpSession();
+        Resource admin = new Resource();
+        admin.setResourceId(1);
+        admin.setName("Admin User");
+        admin.setSystemRole("ADMIN"); // Admin should be able to delete
+        session.setAttribute("loggedInUser", admin);
+
+        Project existingProject = new Project();
+        existingProject.setProjectId(1);
+        when(projectService.getProjectById(1)).thenReturn(existingProject);
+
+        // Act & Assert - Admin can delete and gets redirected to projects
         mockMvc.perform(get("/projects/1/delete").session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/projects"));

@@ -29,7 +29,8 @@
                     th:text="${resource.name + ' - ' + resource.role}">
             </option>
           </select>
-          <span class="form-hint">Who worked on this task?</span>
+          <span class="form-hint" th:if="${session.loggedInUser.systemRole == 'ADMIN'}">Who worked on this task?</span>
+          <span class="form-hint" th:if="${session.loggedInUser.systemRole != 'ADMIN'}">Registering time for yourself</span>
         </div>
 
         <div class="form-input-group">
@@ -67,7 +68,8 @@
                     th:text="${resource.name + ' - ' + resource.role}">
             </option>
           </select>
-          <span class="form-hint">Who worked on this task?</span>
+          <span class="form-hint" th:if="${session.loggedInUser.systemRole == 'ADMIN'}">Who worked on this task?</span>
+          <span class="form-hint" th:if="${session.loggedInUser.systemRole != 'ADMIN'}">Editing your time registration</span>
         </div>
 
         <div class="form-input-group">
