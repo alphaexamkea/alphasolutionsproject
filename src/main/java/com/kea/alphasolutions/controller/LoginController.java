@@ -51,6 +51,11 @@ public class LoginController {
         return "redirect:/login";
     }
 
+    @GetMapping("/access-denied")
+    public String showAccessDenied() {
+        return "error/403";
+    }
+
     @GetMapping("/register")
     public String showRegisterForm() {
         return "register";

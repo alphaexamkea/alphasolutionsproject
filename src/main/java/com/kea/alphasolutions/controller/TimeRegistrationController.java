@@ -61,7 +61,7 @@ public class TimeRegistrationController {
         Resource currentUser = AuthenticationUtil.getCurrentUser(session);
         if (!AuthenticationUtil.isAdmin(session) && 
             !timeRegistration.getResourceId().equals(currentUser.getResourceId())) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         
         timeRegistration.setTaskId(taskId);
@@ -81,7 +81,7 @@ public class TimeRegistrationController {
         Resource currentUser = AuthenticationUtil.getCurrentUser(session);
         if (!AuthenticationUtil.isAdmin(session) && 
             !timeRegistration.getResourceId().equals(currentUser.getResourceId())) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
 
         List<Resource> resources;
@@ -108,7 +108,7 @@ public class TimeRegistrationController {
         Resource currentUser = AuthenticationUtil.getCurrentUser(session);
         if (!AuthenticationUtil.isAdmin(session) && 
             !existingTimeRegistration.getResourceId().equals(currentUser.getResourceId())) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         
         timeRegistration.setTimeId(id);
@@ -128,7 +128,7 @@ public class TimeRegistrationController {
         Resource currentUser = AuthenticationUtil.getCurrentUser(session);
         if (!AuthenticationUtil.isAdmin(session) && 
             !timeRegistration.getResourceId().equals(currentUser.getResourceId())) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         
         timeRegistrationService.deleteTimeRegistration(id);

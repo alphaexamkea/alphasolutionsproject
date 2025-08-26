@@ -185,7 +185,7 @@ public class ProjectController {
             return "redirect:/login";
         }
         if (!AuthenticationUtil.isAdmin(session)) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         projectService.deleteProject(id);
         return "redirect:/projects";

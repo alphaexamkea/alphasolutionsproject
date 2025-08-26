@@ -209,10 +209,10 @@ public class ProjectControllerTest {
         existingProject.setProjectId(1);
         when(projectService.getProjectById(1)).thenReturn(existingProject);
 
-        // Act & Assert - Regular user gets redirected to login (access denied)
+        // Act & Assert - Regular user gets redirected to access denied page
         mockMvc.perform(get("/projects/1/delete").session(session))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/access-denied"));
 
         // Verificerer at sletning IKKE blev udført
         verify(projectService, never()).deleteProject(1);
