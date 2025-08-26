@@ -197,6 +197,12 @@ public class ResourceControllerTest {
         adminUser.setSystemRole("ADMIN");
         session.setAttribute("loggedInUser", adminUser);
 
+        // Mock that the resource exists
+        Resource existingResource = new Resource();
+        existingResource.setResourceId(3);
+        existingResource.setName("Existing Resource");
+        when(resourceService.getResourceById(3)).thenReturn(existingResource);
+
         // Act & Assert - Opdatering udføres og omdirigerer
         mockMvc.perform(post("/resources/3/update")
                 .session(session)
@@ -241,6 +247,12 @@ public class ResourceControllerTest {
         adminUser.setName("Admin User");
         adminUser.setSystemRole("ADMIN");
         session.setAttribute("loggedInUser", adminUser);
+
+        // Mock that the resource exists
+        Resource existingResource = new Resource();
+        existingResource.setResourceId(3);
+        existingResource.setName("Resource to Delete");
+        when(resourceService.getResourceById(3)).thenReturn(existingResource);
 
         // Act & Assert - Sletning udføres succesfuldt
         mockMvc.perform(get("/resources/3/delete").session(session))
