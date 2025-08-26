@@ -18,6 +18,11 @@ public class LoginController {
         this.resourceRepository = resourceRepository;
     }
 
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";

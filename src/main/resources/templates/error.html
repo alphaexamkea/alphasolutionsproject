@@ -29,6 +29,10 @@
                     <p><strong>Message:</strong> <span th:text="${message}"></span></p>
                 </div>
                 
+                <div th:if="${path}">
+                    <p><strong>Path:</strong> <span th:text="${path}"></span></p>
+                </div>
+                
                 <div th:if="${timestamp}">
                     <p><strong>Time:</strong> <span th:text="${timestamp}"></span></p>
                 </div>

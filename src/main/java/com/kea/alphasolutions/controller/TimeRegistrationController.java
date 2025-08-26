@@ -23,6 +23,12 @@ public class TimeRegistrationController {
         this.resourceService = resourceService;
     }
 
+    private void checkNotFound(Object entity, String message) {
+        if (entity == null) {
+            throw new RuntimeException(message);
+        }
+    }
+
     // Show form to create new time registration
     @GetMapping("/tasks/{taskId}/timeregistrations/new")
     public String showCreateForm(HttpSession session, @PathVariable int taskId, Model model) {
@@ -57,9 +63,7 @@ public class TimeRegistrationController {
             return "redirect:/login";
         }
         TimeRegistration timeRegistration = timeRegistrationService.getTimeRegistrationById(id);
-        if (timeRegistration == null) {
-            return "shared/error";
-        }
+        checkNotFound(timeRegistration, "Time registration not found with id: " + id);
 
         List<Resource> resources = resourceService.getAllResources();
 
@@ -90,6 +94,6 @@ public class TimeRegistrationController {
             timeRegistrationService.deleteTimeRegistration(id);
             return "redirect:/tasks/" + timeRegistration.getTaskId();
         }
-        return "shared/error";
+        throw new RuntimeException("Time registration not found with id: " + id);
     }
 }

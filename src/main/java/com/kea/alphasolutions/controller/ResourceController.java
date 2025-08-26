@@ -26,6 +26,12 @@ public class ResourceController {
         this.taskService = taskService;
     }
 
+    private void checkNotFound(Object entity, String message) {
+        if (entity == null) {
+            throw new RuntimeException(message);
+        }
+    }
+
     // List all resources
     @GetMapping("/resources")
     public String listResources(HttpSession session, Model model) {
@@ -64,9 +70,7 @@ public class ResourceController {
             return "redirect:/login";
         }
         Resource resource = resourceService.getResourceById(id);
-        if (resource == null) {
-            return "shared/error";
-        }
+        checkNotFound(resource, "Resource not found with id: " + id);
 
         List<TimeRegistration> recentTimeEntries = timeRegistrationService.getRecentTimeEntriesByResourceId(id, 10);
         double totalHours = timeRegistrationService.getTotalHoursByResourceId(id);
@@ -85,9 +89,7 @@ public class ResourceController {
             return "redirect:/login";
         }
         Resource resource = resourceService.getResourceById(id);
-        if (resource == null) {
-            return "shared/error";
-        }
+        checkNotFound(resource, "Resource not found with id: " + id);
         model.addAttribute("resource", resource);
         return "resource/form";
     }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Error - Alpha Solutions</title>
+    <title>Page Not Found - Alpha Solutions</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -11,24 +11,15 @@
     <div class="container">
         <div class="error-container">
             <div class="error-header">
-                <h1>🚫 Oops! Something went wrong</h1>
-                <p>We encountered an error while processing your request.</p>
+                <h1>🔍 Page Not Found</h1>
+                <p>The page you're looking for doesn't exist.</p>
             </div>
             
             <div class="error-details">
-                <div th:if="${error}">
-                    <h3>Error Details:</h3>
-                    <p th:text="${error}" class="error-message"></p>
+                <p><strong>Status:</strong> 404 - Not Found</p>
+                <div th:if="${path}">
+                    <p><strong>Path:</strong> <span th:text="${path}"></span></p>
                 </div>
-                
-                <div th:if="${status}">
-                    <p><strong>Status:</strong> <span th:text="${status}"></span></p>
-                </div>
-                
-                <div th:if="${message}">
-                    <p><strong>Message:</strong> <span th:text="${message}"></span></p>
-                </div>
-                
                 <div th:if="${timestamp}">
                     <p><strong>Time:</strong> <span th:text="${timestamp}"></span></p>
                 </div>

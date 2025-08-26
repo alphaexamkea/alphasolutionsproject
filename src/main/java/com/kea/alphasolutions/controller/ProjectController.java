@@ -33,6 +33,12 @@ public class ProjectController {
         this.taskService = taskService;
     }
 
+    private void checkNotFound(Object entity, String message) {
+        if (entity == null) {
+            throw new RuntimeException(message);
+        }
+    }
+
     // Show all projects
     @GetMapping("/projects")
     public String listProjects(HttpSession session, Model model) {
@@ -87,9 +93,7 @@ public class ProjectController {
             return "redirect:/login";
         }
         Project project = projectService.getProjectById(id);
-        if (project == null) {
-            return "shared/error";
-        }
+        checkNotFound(project, "Project not found with id: " + id);
 
         List<Subproject> subprojects = subprojectService.getSubprojectsByProjectId(id);
 
@@ -155,9 +159,7 @@ public class ProjectController {
             return "redirect:/login";
         }
         Project project = projectService.getProjectById(id);
-        if (project == null) {
-            return "shared/error";
-        }
+        checkNotFound(project, "Project not found with id: " + id);
         model.addAttribute("project", project);
         return "project/form"; // reuse form
     }

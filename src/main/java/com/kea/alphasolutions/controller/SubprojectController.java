@@ -30,6 +30,12 @@ public class SubprojectController {
         this.timeRegistrationService = timeRegistrationService;
     }
 
+    private void checkNotFound(Object entity, String message) {
+        if (entity == null) {
+            throw new RuntimeException(message);
+        }
+    }
+
 
     // Show form to create new subproject
     @GetMapping("/projects/{projectId}/subprojects/new")
@@ -61,9 +67,7 @@ public class SubprojectController {
             return "redirect:/login";
         }
         Subproject subproject = subprojectService.getSubprojectById(id);
-        if (subproject == null) {
-            return "shared/error";
-        }
+        checkNotFound(subproject, "Subproject not found with id: " + id);
         List<Task> tasks = taskService.getTasksBySubprojectId(id);
 
         double totalHours = timeRegistrationService.getTotalHoursBySubprojectId(id);
@@ -91,9 +95,7 @@ public class SubprojectController {
             return "redirect:/login";
         }
         Subproject subproject = subprojectService.getSubprojectById(id);
-        if (subproject == null) {
-            return "shared/error";
-        }
+        checkNotFound(subproject, "Subproject not found with id: " + id);
         model.addAttribute("subproject", subproject);
         return "subproject/form";
     }
@@ -120,6 +122,6 @@ public class SubprojectController {
             subprojectService.deleteSubproject(id);
             return "redirect:/projects/" + subproject.getProjectId();
         }
-        return "shared/error";
+        throw new RuntimeException("Subproject not found with id: " + id);
     }
 }

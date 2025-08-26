@@ -29,6 +29,12 @@ public class TaskController {
         this.resourceService = resourceService;
     }
 
+    private void checkNotFound(Object entity, String message) {
+        if (entity == null) {
+            throw new RuntimeException(message);
+        }
+    }
+
     // Show form to create new task
     @GetMapping("/subprojects/{subprojectId}/tasks/new")
     public String showCreateForm(HttpSession session, @PathVariable int subprojectId, Model model) {
@@ -60,9 +66,7 @@ public class TaskController {
             return "redirect:/login";
         }
         Task task = taskService.getTaskById(id);
-        if (task == null) {
-            return "shared/error";
-        }
+        checkNotFound(task, "Task not found with id: " + id);
 
         double totalHours = timeRegistrationService.getTotalHoursByTaskId(id);
         List<TimeRegistration> timeRegistrations = timeRegistrationService.getTimeRegistrationsByTaskId(id);
@@ -92,9 +96,7 @@ public class TaskController {
             return "redirect:/login";
         }
         Task task = taskService.getTaskById(id);
-        if (task == null) {
-            return "shared/error";
-        }
+        checkNotFound(task, "Task not found with id: " + id);
         model.addAttribute("task", task);
         return "task/form";
     }
@@ -121,6 +123,6 @@ public class TaskController {
             taskService.deleteTask(id);
             return "redirect:/subprojects/" + task.getSubprojectId();
         }
-        return "shared/error";
+        throw new RuntimeException("Task not found with id: " + id);
     }
 }

@@ -1,22 +1,30 @@
 package com.kea.alphasolutions.controller;
 
-import com.kea.alphasolutions.model.Resource;
-import com.kea.alphasolutions.service.ResourceService;
-import com.kea.alphasolutions.service.TimeRegistrationService;
-import com.kea.alphasolutions.service.TaskService;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.kea.alphasolutions.model.Resource;
+import com.kea.alphasolutions.service.ResourceService;
+import com.kea.alphasolutions.service.TaskService;
+import com.kea.alphasolutions.service.TimeRegistrationService;
 
 @WebMvcTest(ResourceController.class)
 public class ResourceControllerTest {
