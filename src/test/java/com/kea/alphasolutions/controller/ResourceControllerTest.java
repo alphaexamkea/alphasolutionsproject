@@ -93,10 +93,10 @@ public class ResourceControllerTest {
         regularUser.setSystemRole("USER");
         session.setAttribute("loggedInUser", regularUser);
 
-        // Act & Assert - Almindelig bruger bliver omdirigeret til login
+        // Act & Assert - Almindelig bruger bliver omdirigeret til access denied
         mockMvc.perform(get("/resources/new").session(session))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/access-denied"));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class ResourceControllerTest {
                 .param("role", "Developer")
                 .param("email", "new@example.com"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/access-denied"));
 
         // Verificerer at ressource IKKE blev oprettet
         verify(resourceService, never()).addResource(any(Resource.class));
@@ -182,7 +182,7 @@ public class ResourceControllerTest {
         // Act & Assert - Omdirigeres uden at hente ressource
         mockMvc.perform(get("/resources/3/edit").session(session))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/access-denied"));
 
         verify(resourceService, never()).getResourceById(anyInt());
     }
@@ -232,7 +232,7 @@ public class ResourceControllerTest {
                 .param("role", "Senior Developer")
                 .param("email", "updated@example.com"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/access-denied"));
 
         // Verificerer at opdatering IKKE skete
         verify(resourceService, never()).updateResource(any(Resource.class));
@@ -275,7 +275,7 @@ public class ResourceControllerTest {
         // Act & Assert - Sletning blokeres og bruger omdirigeres
         mockMvc.perform(get("/resources/3/delete").session(session))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/access-denied"));
 
         // Verificerer at sletning IKKE skete
         verify(resourceService, never()).deleteResource(anyInt());

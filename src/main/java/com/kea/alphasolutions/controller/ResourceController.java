@@ -47,7 +47,7 @@ public class ResourceController {
     @GetMapping("/resources/new")
     public String showCreateForm(HttpSession session, Model model) {
         if (!AuthenticationUtil.isAdmin(session)) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         model.addAttribute("resource", new Resource());
         return "resource/form";
@@ -57,7 +57,7 @@ public class ResourceController {
     @PostMapping("/resources")
     public String saveResource(HttpSession session, @ModelAttribute Resource resource) {
         if (!AuthenticationUtil.isAdmin(session)) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         resourceService.addResource(resource);
         return "redirect:/resources";
@@ -86,7 +86,7 @@ public class ResourceController {
     @GetMapping("/resources/{id}/edit")
     public String showEditForm(HttpSession session, @PathVariable int id, Model model) {
         if (!AuthenticationUtil.isAdmin(session)) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         Resource resource = resourceService.getResourceById(id);
         checkNotFound(resource, "Resource not found with id: " + id);
@@ -98,7 +98,7 @@ public class ResourceController {
     @PostMapping("/resources/{id}/update")
     public String updateResource(HttpSession session, @PathVariable int id, @ModelAttribute Resource resource) {
         if (!AuthenticationUtil.isAdmin(session)) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         Resource existingResource = resourceService.getResourceById(id);
         checkNotFound(existingResource, "Resource not found with id: " + id);
@@ -112,7 +112,7 @@ public class ResourceController {
     @GetMapping("/resources/{id}/delete")
     public String deleteResource(HttpSession session, @PathVariable int id) {
         if (!AuthenticationUtil.isAdmin(session)) {
-            return "redirect:/login";
+            return "redirect:/access-denied";
         }
         resourceService.deleteResource(id);
         return "redirect:/resources";

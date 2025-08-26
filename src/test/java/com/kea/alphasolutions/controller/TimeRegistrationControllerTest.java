@@ -78,6 +78,7 @@ public class TimeRegistrationControllerTest {
         TimeRegistration existingTimeReg = new TimeRegistration();
         existingTimeReg.setTimeId(1);
         existingTimeReg.setTaskId(1);
+        existingTimeReg.setResourceId(1); // Set resourceId to match user
 
         Resource testResource = new Resource();
         testResource.setResourceId(1);

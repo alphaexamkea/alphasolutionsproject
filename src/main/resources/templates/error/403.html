@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Access Denied - Alpha Solutions</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div th:replace="shared/header :: header"></div>
+    
+    <div class="container">
+        <div class="error-container">
+            <div class="error-header">
+                <h1>🔒 Access Denied</h1>
+                <p>You need administrator privileges to perform this action.</p>
+            </div>
+            
+            <div class="error-details">
+                <p><strong>Status:</strong> 403 - Forbidden</p>
+                <p>Only administrators can access this feature. Please contact your system administrator if you believe you should have access.</p>
+                <div th:if="${timestamp}">
+                    <p><strong>Time:</strong> <span th:text="${timestamp}"></span></p>
+                </div>
+            </div>
+            
+            <div class="error-actions">
+                <a href="javascript:history.back()" class="btn btn-secondary">← Go Back</a>
+                <a href="/projects" class="btn btn-primary">🏠 Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

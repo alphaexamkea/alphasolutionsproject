@@ -38,7 +38,13 @@ public class TimeRegistrationController {
         TimeRegistration timeRegistration = new TimeRegistration();
         timeRegistration.setTaskId(taskId);
 
-        List<Resource> resources = resourceService.getAllResources();
+        List<Resource> resources;
+        if (AuthenticationUtil.isAdmin(session)) {
+            resources = resourceService.getAllResources();
+        } else {
+            Resource currentUser = AuthenticationUtil.getCurrentUser(session);
+            resources = List.of(currentUser);
+        }
 
         model.addAttribute("timeRegistration", timeRegistration);
         model.addAttribute("resources", resources);
@@ -51,6 +57,13 @@ public class TimeRegistrationController {
         if (!AuthenticationUtil.isAuthenticated(session)) {
             return "redirect:/login";
         }
+        
+        Resource currentUser = AuthenticationUtil.getCurrentUser(session);
+        if (!AuthenticationUtil.isAdmin(session) && 
+            !timeRegistration.getResourceId().equals(currentUser.getResourceId())) {
+            return "redirect:/access-denied";
+        }
+        
         timeRegistration.setTaskId(taskId);
         timeRegistrationService.addTimeRegistration(timeRegistration);
         return "redirect:/tasks/" + taskId;
@@ -65,7 +78,18 @@ public class TimeRegistrationController {
         TimeRegistration timeRegistration = timeRegistrationService.getTimeRegistrationById(id);
         checkNotFound(timeRegistration, "Time registration not found with id: " + id);
 
-        List<Resource> resources = resourceService.getAllResources();
+        Resource currentUser = AuthenticationUtil.getCurrentUser(session);
+        if (!AuthenticationUtil.isAdmin(session) && 
+            !timeRegistration.getResourceId().equals(currentUser.getResourceId())) {
+            return "redirect:/access-denied";
+        }
+
+        List<Resource> resources;
+        if (AuthenticationUtil.isAdmin(session)) {
+            resources = resourceService.getAllResources();
+        } else {
+            resources = List.of(currentUser);
+        }
 
         model.addAttribute("timeRegistration", timeRegistration);
         model.addAttribute("resources", resources);
@@ -81,6 +105,12 @@ public class TimeRegistrationController {
         TimeRegistration existingTimeRegistration = timeRegistrationService.getTimeRegistrationById(id);
         checkNotFound(existingTimeRegistration, "Time registration not found with id: " + id);
         
+        Resource currentUser = AuthenticationUtil.getCurrentUser(session);
+        if (!AuthenticationUtil.isAdmin(session) && 
+            !existingTimeRegistration.getResourceId().equals(currentUser.getResourceId())) {
+            return "redirect:/access-denied";
+        }
+        
         timeRegistration.setTimeId(id);
         timeRegistrationService.updateTimeRegistration(timeRegistration);
         return "redirect:/tasks/" + timeRegistration.getTaskId();
@@ -94,6 +124,12 @@ public class TimeRegistrationController {
         }
         TimeRegistration timeRegistration = timeRegistrationService.getTimeRegistrationById(id);
         checkNotFound(timeRegistration, "Time registration not found with id: " + id);
+        
+        Resource currentUser = AuthenticationUtil.getCurrentUser(session);
+        if (!AuthenticationUtil.isAdmin(session) && 
+            !timeRegistration.getResourceId().equals(currentUser.getResourceId())) {
+            return "redirect:/access-denied";
+        }
         
         timeRegistrationService.deleteTimeRegistration(id);
         return "redirect:/tasks/" + timeRegistration.getTaskId();
