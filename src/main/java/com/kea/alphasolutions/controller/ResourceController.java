@@ -100,6 +100,9 @@ public class ResourceController {
         if (!AuthenticationUtil.isAdmin(session)) {
             return "redirect:/login";
         }
+        Resource existingResource = resourceService.getResourceById(id);
+        checkNotFound(existingResource, "Resource not found with id: " + id);
+        
         resource.setResourceId(id);
         resourceService.updateResource(resource);
         return "redirect:/resources";

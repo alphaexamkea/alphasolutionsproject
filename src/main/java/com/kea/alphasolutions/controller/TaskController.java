@@ -107,6 +107,9 @@ public class TaskController {
         if (!AuthenticationUtil.isAuthenticated(session)) {
             return "redirect:/login";
         }
+        Task existingTask = taskService.getTaskById(id);
+        checkNotFound(existingTask, "Task not found with id: " + id);
+        
         task.setTaskId(id);
         taskService.updateTask(task);
         return "redirect:/subprojects/" + task.getSubprojectId();
@@ -119,10 +122,9 @@ public class TaskController {
             return "redirect:/login";
         }
         Task task = taskService.getTaskById(id);
-        if (task != null) {
-            taskService.deleteTask(id);
-            return "redirect:/subprojects/" + task.getSubprojectId();
-        }
-        throw new RuntimeException("Task not found with id: " + id);
+        checkNotFound(task, "Task not found with id: " + id);
+        
+        taskService.deleteTask(id);
+        return "redirect:/subprojects/" + task.getSubprojectId();
     }
 }

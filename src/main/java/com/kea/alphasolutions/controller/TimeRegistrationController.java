@@ -78,6 +78,9 @@ public class TimeRegistrationController {
         if (!AuthenticationUtil.isAuthenticated(session)) {
             return "redirect:/login";
         }
+        TimeRegistration existingTimeRegistration = timeRegistrationService.getTimeRegistrationById(id);
+        checkNotFound(existingTimeRegistration, "Time registration not found with id: " + id);
+        
         timeRegistration.setTimeId(id);
         timeRegistrationService.updateTimeRegistration(timeRegistration);
         return "redirect:/tasks/" + timeRegistration.getTaskId();
@@ -90,10 +93,9 @@ public class TimeRegistrationController {
             return "redirect:/login";
         }
         TimeRegistration timeRegistration = timeRegistrationService.getTimeRegistrationById(id);
-        if (timeRegistration != null) {
-            timeRegistrationService.deleteTimeRegistration(id);
-            return "redirect:/tasks/" + timeRegistration.getTaskId();
-        }
-        throw new RuntimeException("Time registration not found with id: " + id);
+        checkNotFound(timeRegistration, "Time registration not found with id: " + id);
+        
+        timeRegistrationService.deleteTimeRegistration(id);
+        return "redirect:/tasks/" + timeRegistration.getTaskId();
     }
 }

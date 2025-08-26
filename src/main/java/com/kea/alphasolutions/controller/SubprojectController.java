@@ -106,6 +106,9 @@ public class SubprojectController {
         if (!AuthenticationUtil.isAuthenticated(session)) {
             return "redirect:/login";
         }
+        Subproject existingSubproject = subprojectService.getSubprojectById(id);
+        checkNotFound(existingSubproject, "Subproject not found with id: " + id);
+        
         subproject.setSubprojectId(id);
         subprojectService.updateSubproject(subproject);
         return "redirect:/projects/" + subproject.getProjectId();
@@ -118,10 +121,9 @@ public class SubprojectController {
             return "redirect:/login";
         }
         Subproject subproject = subprojectService.getSubprojectById(id);
-        if (subproject != null) {
-            subprojectService.deleteSubproject(id);
-            return "redirect:/projects/" + subproject.getProjectId();
-        }
-        throw new RuntimeException("Subproject not found with id: " + id);
+        checkNotFound(subproject, "Subproject not found with id: " + id);
+        
+        subprojectService.deleteSubproject(id);
+        return "redirect:/projects/" + subproject.getProjectId();
     }
 }

@@ -170,6 +170,9 @@ public class ProjectController {
         if (!AuthenticationUtil.isAuthenticated(session)) {
             return "redirect:/login";
         }
+        Project existingProject = projectService.getProjectById(id);
+        checkNotFound(existingProject, "Project not found with id: " + id);
+        
         project.setProjectId(id);
         projectService.updateProject(project);
         return "redirect:/projects";
