@@ -58,16 +58,19 @@ public class ProjectRepository {
 
     public int countSubprojectsByProjectId(int projectId) {
         String sql = "SELECT COUNT(*) FROM Subproject WHERE project_id = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, projectId);
+        Integer result = jdbcTemplate.queryForObject(sql, Integer.class, projectId);
+        return result != null ? result : 0;
     }
 
     public int countTasksByProjectId(int projectId) {
         String sql = "SELECT COUNT(*) FROM Task t JOIN Subproject s ON t.subproject_id = s.subproject_id WHERE s.project_id = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, projectId);
+        Integer result = jdbcTemplate.queryForObject(sql, Integer.class, projectId);
+        return result != null ? result : 0;
     }
 
     public int countResourcesByProjectId(int projectId) {
         String sql = "SELECT COUNT(DISTINCT tr.resource_id) FROM TimeRegistration tr JOIN Task t ON tr.task_id = t.task_id JOIN Subproject s ON t.subproject_id = s.subproject_id WHERE s.project_id = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, projectId);
+        Integer result = jdbcTemplate.queryForObject(sql, Integer.class, projectId);
+        return result != null ? result : 0;
     }
 }
